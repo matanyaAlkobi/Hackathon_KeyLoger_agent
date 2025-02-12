@@ -1,7 +1,7 @@
 from  abc import ABC, abstractmethod
 from pynput.keyboard import Listener, Key, KeyCode
 
-from old.matanya.keylogger import my_dict
+
 
 
 class Logger(ABC):
