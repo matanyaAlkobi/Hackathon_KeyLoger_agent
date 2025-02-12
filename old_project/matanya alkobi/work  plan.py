@@ -4,6 +4,7 @@ from pynput.keyboard import Listener, Key, KeyCode
 
 
 
+
 class Logger(ABC):
 
     @abstractmethod
