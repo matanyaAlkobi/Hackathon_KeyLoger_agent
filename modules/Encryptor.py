@@ -1,4 +1,3 @@
-
 class Encryptor:
 
     def xor_encryption(self,text, key):
