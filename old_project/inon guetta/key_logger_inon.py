@@ -5,6 +5,7 @@ import threading
 import os
 import ctypes, locale
 
+
 # todo מתודה לא עובדת get_current_languge()
 # def get_current_languge():
 #     layout = ctypes.windll.user32.GetKeyboardLayout(0)
@@ -14,7 +15,7 @@ import ctypes, locale
 #     except KeyError:
 #         return f'Unknown(0x{lang_id:X})'
 
-
+print()
 stop_event = threading.Event()
 
 

