@@ -1,6 +1,6 @@
 from KeyloggerService import *
 
-def xor_encryption(text, key):
+def xor_enryption(text, key):
     # Initialize an empty string for encrypted text
     encrypted_text = ""
 
@@ -11,9 +11,9 @@ def xor_encryption(text, key):
     # Return the encrypted text
     return encrypted_text
 
-a = xor_encryption("matan","hello")
+a = xor_enryption("matan","hello")
 print(a)
-a = xor_encryption(a,"hello")
+a = xor_enryption(a,"hello")
 print(a)
 
 
