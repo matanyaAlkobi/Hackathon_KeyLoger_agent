@@ -1,6 +1,5 @@
 import json
 
-
 class FileWriter:
     @staticmethod
     def write_to_file(data:dict):
