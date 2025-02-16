@@ -15,10 +15,11 @@ class KeyloggerService:
     def __change_action(self):
         self.__action = not (self.__action)
 
-
+    def return_action(self):
+        return self.__action
     def __exit_point(self):
         if keyboard.is_pressed('shift+q'):
-            os._exit(0)
+            # os._exit(0)
             self.__change_action()
 
     @staticmethod

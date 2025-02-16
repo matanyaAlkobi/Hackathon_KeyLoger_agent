@@ -34,6 +34,7 @@ class KeyloggerService:
     def __exit_point(self):
         if keyboard.is_pressed('q'):
             self.__change_action()
+            # os.exit(0)
 
     @staticmethod
     def __current_time() -> str:
