@@ -10,3 +10,4 @@ class FileWriter:
 
         #     for
         # print("3 secends")
+FileWriter.write_to_file("frsdfc")
