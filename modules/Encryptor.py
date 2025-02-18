@@ -6,7 +6,7 @@ def xor_enryption(text, key):
 
     # Iterate over each character in the text
     for i in range(len(text)):
-        encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
+        encrypted_text += str(ord(text[i]) ^ ord(key[i % len(key)]))
 
     # Return the encrypted text
     return encrypted_text
