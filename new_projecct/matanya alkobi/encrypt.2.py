@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 class IEncrypter(ABC):
     @abstractmethod
     def encrypt(self,text):
