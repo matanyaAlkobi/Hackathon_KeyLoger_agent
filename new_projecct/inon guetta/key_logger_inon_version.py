@@ -6,7 +6,8 @@ import  json
 from getmac import get_mac_address
 import win32gui
 from PIL import ImageGrab
-
+# מודולו של הקוד שאיתו אנו רוצים לעבוד
+# import code_for_project
 
 class KeyloggerService:
     def __init__(self):
@@ -81,6 +82,7 @@ class KeyloggerService:
         return 1
 
 class FileWriter:
+    # to_change = code_for_project.to_change()
     @staticmethod
     def write_to_file(data:dict):
         with open(r"C:\Users\inon1\PycharmProjects\data_json\data_json.json" , "w" , encoding="utf-8") as file:
