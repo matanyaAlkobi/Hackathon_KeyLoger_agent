@@ -1,4 +1,5 @@
 from KeyloggerService import *
+
 from modules.IEncryptor import *
 import json
 
@@ -21,9 +22,6 @@ class XOREncryptor(IEncryptor):
             decrypted_text += chr(encrypted_text[i] ^ ord(key[i % len(key)]))
 
         return json.loads(decrypted_text.replace("'", '"'))
-
-
-
 
 
 
