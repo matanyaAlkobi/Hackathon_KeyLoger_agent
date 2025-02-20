@@ -1,5 +1,4 @@
 import json
-from abc import  ABC
 
 class Encryption:
 

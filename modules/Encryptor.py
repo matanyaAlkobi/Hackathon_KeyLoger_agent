@@ -1,21 +1,27 @@
 from KeyloggerService import *
-from modules.IEncryptor import IEncryptor
 
+from modules.IEncryptor import *
+import json
 
 class XOREncryptor(IEncryptor):
-    def encryption(self,text):
-        key = "hello"
-        # Initialize an empty string for encrypted text
-        encrypted_text = ""
+    def encryption(self,text, key: str):
 
-        # Iterate over each character in the text
+        text = str(text)
+        encrypted_text = []
+
         for i in range(len(text)):
-            encrypted_text += str(ord(text[i]) ^ ord(key[i % len(key)]))
+            encrypted_text.append(ord(text[i]) ^ ord(key[i % len(key)]))
 
-        # Return the encrypted text
         return encrypted_text
 
-    def  decryption(self,text):
-        return self.encryption(text)
+    def  decryption(self,encrypted_text, key: str):
+
+        decrypted_text = ""
+
+        for i in range(len(encrypted_text)):
+            decrypted_text += chr(encrypted_text[i] ^ ord(key[i % len(key)]))
+
+        return json.loads(decrypted_text.replace("'", '"'))
+
 
 
