@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>תוכן תיקיית: {{ folder_name }}</title>
+</head>
+<body>
+    <h1>תוכן תיקיית: {{ folder_name }}</h1>
+
+    <div id="file-list">
+        <!-- כאן יופיעו הקבצים -->
+    </div>
+
+    <script>
+        // שליחת בקשה לשרת לקבלת רשימת הקבצים כ-JSON
+        fetch('/folders/{{ folder_name }}')
+            .then(response => response.json())  // המרה ל-JSON
+            .then(data => {
+                // יצירת תוכן ה-HTML על פי הנתונים שהתקבלו
+                const fileListDiv = document.getElementById('file-list');
+
+                if (data.files && data.files.length > 0) {
+                    let fileListHTML = '<ul>';
+                    data.files.forEach(file => {
+                        fileListHTML += `<li>${file}</li>`;
+                    });
+                    fileListHTML += '</ul>';
+                    fileListDiv.innerHTML = fileListHTML;
+                } else {
+                    fileListDiv.innerHTML = '<p>אין קבצים בתיקיה.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching files:', error);
+                document.getElementById('file-list').innerHTML = '<p>אירעה שגיאה בעת טעינת הקבצים.</p>';
+            });
+    </script>
+
+    <a href="{{ url_for('get_folders') }}">חזור לרשימת תיקיות</a>
+</body>
+</html>

