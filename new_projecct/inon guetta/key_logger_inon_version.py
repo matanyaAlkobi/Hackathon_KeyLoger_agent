@@ -6,7 +6,7 @@ import  json
 from getmac import get_mac_address
 import win32gui
 from PIL import ImageGrab
-# מודולו של הקוד שאיתו אנו רוצים לעבוד
+# מודל של הקוד שאיתו אנו רוצים לעבוד
 # import code_for_project
 
 class KeyloggerService:
