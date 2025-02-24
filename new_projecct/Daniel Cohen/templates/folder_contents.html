@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תוכן תיקיית: {{ folder_name }}</title>
+</head>
+<body>
+    <h1>תוכן תיקיית: {{ folder_name }}</h1>
+
+    <div id="file-list">
+        <!-- כאן יופיעו הקבצים -->
+        {% if files %}
+            <ul>
+                {% for file in files %}
+                    <li>
+                        <strong>שם המחשב:</strong> {{ file.mac }} <br>
+                        <strong>תאריך:</strong> {{ file.date }} <br>
+                        <strong>שם הקובץ:</strong> {{ file.filename }} <br>
+                        <strong>אירועים:</strong>
+                        <ul>
+                            {% for event in file.events %}
+                                <li>{{ event }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>אין קבצים בתיקיה.</p>
+        {% endif %}
+    </div>
+
+    <a href="{{ url_for('get_folders') }}">חזור לרשימת תיקיות</a>
+</body>
+</html>
