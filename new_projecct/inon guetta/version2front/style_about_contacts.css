@@ -1,0 +1,65 @@
+p{
+    text-align: center;
+}
+h4{
+    margin-left: 11% ;
+    padding-top: 1.5%;
+    margin-bottom: 4%;
+    display: inline-block;
+    border-bottom: 4px double rgba(20, 20, 20, 1);
+
+}
+
+.about{
+    width: 50%;
+    margin: auto;
+}
+
+.about h2{
+    text-align: center;
+    padding-top: 6%;
+    padding-bottom: 6%;
+}
+
+.contact{
+    width: 70%;
+    margin: auto;
+}
+
+.contact h2{
+    text-align: center;
+    padding-top: 6%;
+}
+
+.to_row0{
+    padding-top: 6%;
+    display: flex;
+}
+.to_row1{
+    padding-top: 6%;
+    margin: auto;
+    border: 5px black;
+    width: 85%;
+}
+
+h3{
+    display: flex;
+    text-align: center;
+    margin: auto;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+
+h3:hover{
+    cursor: pointer;
+    color: brown;
+    font-weight: bold;
+    transform: translateY(-2px);
+    
+}
+
+.to_row1 div {
+    display: none;
+}
+
