@@ -2,6 +2,7 @@
 <html lang="he">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תוכן תיקיית: {{ folder_name }}</title>
 </head>
 <body>
@@ -9,32 +10,26 @@
 
     <div id="file-list">
         <!-- כאן יופיעו הקבצים -->
+        {% if files %}
+            <ul>
+                {% for file in files %}
+                    <li>
+                        <strong>שם המחשב:</strong> {{ file.mac }} <br>
+                        <strong>תאריך:</strong> {{ file.date }} <br>
+                        <strong>שם הקובץ:</strong> {{ file.filename }} <br>
+                        <strong>אירועים:</strong>
+                        <ul>
+                            {% for event in file.events %}
+                                <li>{{ event }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>אין קבצים בתיקיה.</p>
+        {% endif %}
     </div>
-
-    <script>
-        // שליחת בקשה לשרת לקבלת רשימת הקבצים כ-JSON
-        fetch('/folders/{{ folder_name }}')
-            .then(response => response.json())  // המרה ל-JSON
-            .then(data => {
-                // יצירת תוכן ה-HTML על פי הנתונים שהתקבלו
-                const fileListDiv = document.getElementById('file-list');
-
-                if (data.files && data.files.length > 0) {
-                    let fileListHTML = '<ul>';
-                    data.files.forEach(file => {
-                        fileListHTML += `<li>${file}</li>`;
-                    });
-                    fileListHTML += '</ul>';
-                    fileListDiv.innerHTML = fileListHTML;
-                } else {
-                    fileListDiv.innerHTML = '<p>אין קבצים בתיקיה.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching files:', error);
-                document.getElementById('file-list').innerHTML = '<p>אירעה שגיאה בעת טעינת הקבצים.</p>';
-            });
-    </script>
 
     <a href="{{ url_for('get_folders') }}">חזור לרשימת תיקיות</a>
 </body>

