@@ -2,7 +2,7 @@ import threading
 import time
 import keyboard
 import os
-import  json
+import json
 from getmac import get_mac_address
 import win32gui
 from PIL import ImageGrab
