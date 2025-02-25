@@ -1,43 +1,44 @@
+
 import json
 
-class Encryption:
+class Encryptor:
 
     @staticmethod
-    def xor_encryption(text ,key: str):
-        text = str(text)
+    def xor_encryption(text, key: str):
+        # המרת הטקסט למיתרים אם הוא לא כבר מיתרים
+        text = json.dumps(text)  # המרת המילון למיתר JSON
         encrypted_text = []
 
+        # ביצוע XOR בין כל תו בטקסט לבין המפתח
         for i in range(len(text)):
-            encrypted_text.append(ord(text[i]) ^ ord(key[i % len(key)]))
+            # המרה של התו למספר ASCII ו-XOR עם התו במפתח
+            encrypted_text.append(str(ord(text[i]) ^ ord(key[i % len(key)])))
 
         return encrypted_text
 
     @staticmethod
-    def xor_decryption(encrypted_text,key):
+    def xor_decryption(encrypted_text, key):
         decrypted_text = ""
 
+        # ביצוע XOR כדי להחזיר את הטקסט המקורי
         for i in range(len(encrypted_text)):
-            decrypted_text += chr(encrypted_text[i] ^ ord(key[i % len(key)]))
+            # המרה של כל ערך לרשימה של מספרים
+            encrypted_value = int(encrypted_text[i])  # המרת המיתר חזרה למספר
+            decrypted_text += chr(encrypted_value ^ ord(key[i % len(key)]))  # XOR והמרה חזרה לתו
 
-        return json.loads(decrypted_text)
-
-s = {"trsd}tgvsr":"ttttt"}
-
-data = json.dumps(s)
-print(type(data))
-
-b = Encryption()
-# enc =b.xor_decryption(data,"a")
-# print(type(enc))
-enc = Encryption.xor_encryption(data,"a")
-print(enc)
-dec = Encryption.xor_decryption(enc,"a")
-print(dec)
-# new = json.loads(dec)
-print(type(dec))
-# print(new['trsdtgvsr'])
+        # ניסוי להמיר את התוצאה לפורמט JSON
+        return json.loads(decrypted_text)  # אם זה היה JSON תקני, נחזיר אותו
 
 
 
-
-
+# a = {"gsf": {"123": {"987":657}}}  # מילון
+# b = Encryptor.xor_encryption(a, "aaa")  # הצפנה עם XOR
+# b = json.dumps(b)
+# print(b)  # צפוי להחזיר רשימה של מספרים
+# print(type(b))
+# b = json.loads(b)# רשימה של מיתרים
+# print(type(b))
+# print("rrrr")
+# c = Encryptor.xor_decryption(b, "aaa")  # פענוח עם XOR
+# print(c)  # צפוי להחזיר את המילון המקורי
+# print(type(c))  # צפוי להחזיר dict או str (תלוי בתוצאה)
