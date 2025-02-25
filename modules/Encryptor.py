@@ -1,19 +1,27 @@
 from KeyloggerService import *
 
-def xor_enryption(text, key):
-    # Initialize an empty string for encrypted text
-    encrypted_text = ""
+from modules.IEncryptor import *
+import json
 
-    # Iterate over each character in the text
-    for i in range(len(text)):
-        encrypted_text += chr(ord(text[i]) ^ ord(key[i % len(key)]))
+class XOREncryptor(IEncryptor):
+    def encryption(self,text, key: str):
 
-    # Return the encrypted text
-    return encrypted_text
+        text = str(text)
+        encrypted_text = []
 
-a = xor_enryption("matan","hello")
-print(a)
-a = xor_enryption(a,"hello")
-print(a)
+        for i in range(len(text)):
+            encrypted_text.append(ord(text[i]) ^ ord(key[i % len(key)]))
+
+        return encrypted_text
+
+    def  decryption(self,encrypted_text, key: str):
+
+        decrypted_text = ""
+
+        for i in range(len(encrypted_text)):
+            decrypted_text += chr(encrypted_text[i] ^ ord(key[i % len(key)]))
+
+        return json.loads(decrypted_text.replace("'", '"'))
+
 
 
