@@ -17,8 +17,8 @@ h4{
 
 .about h2{
     text-align: center;
-    padding-top: 6%;
-    padding-bottom: 6%;
+    padding-top: 2%;
+    padding-bottom: 1%;
 }
 
 .contact{
@@ -28,15 +28,15 @@ h4{
 
 .contact h2{
     text-align: center;
-    padding-top: 6%;
+    padding-top: 3%;
 }
 
 .to_row0{
-    padding-top: 6%;
+    padding-top: 3%;
     display: flex;
 }
 .to_row1{
-    padding-top: 6%;
+    padding-top: 3%;
     margin: auto;
     border: 5px black;
     width: 85%;
@@ -56,10 +56,51 @@ h3:hover{
     color: brown;
     font-weight: bold;
     transform: translateY(-2px);
-    
+
 }
 
-.to_row1 div {
+.not_show_start {
     display: none;
+    border-radius: 15px;
+    box-shadow:  1px 1px 1px 1px black;
+}
+.p_send_mail{
+    text-align: left;
+    padding-left: 9%;
 }
 
+.design_level_2{
+    text-align: left;
+    padding-left:9%;
+}
+
+.logo_email{
+    width: 35px;
+    height: 35px;
+    border-radius: 15%;
+}
+.logo_whatsapp{
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+}
+.logo_email:hover{
+    opacity: 0.6;
+    transition: 0.2s;
+}
+.logo_whatsapp:hover{
+    opacity: 0.6;
+    transition: 0.2s;
+
+}
+.bar_links{
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    list-style: none;
+    padding-top: 4%;
+    padding-bottom: 1%;
+}
