@@ -10,4 +10,3 @@ class FileWriter(IWriter):
             print(data)
             if data:
                 json.dump(data , file ,ensure_ascii=False,  indent=4)
-
