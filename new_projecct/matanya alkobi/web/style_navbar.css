@@ -1,0 +1,125 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-image:url('imeg.jpg');
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 2% 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+.home{
+    font-size: 175%;
+    text-decoration: none;
+    font-weight: 500;
+    color:white;
+}
+.home:hover{
+    color: cadetblue;
+    transition: 0.3s;
+}
+
+.navbar a{
+    position: relative;
+    font-size: 18px;
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    margin-left: 40px;
+}
+
+.navbar a:hover{
+    color: tomato;
+    transition: 0.3s;
+}
+
+.navbar a::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: rgb(26, 143, 201);
+    transition: 0.3s;
+}
+
+
+
+.navbar a:hover::before{
+    width: 100%;
+}
+
+
+#sumbit_button{
+    background-color: rgb(128, 98, 195);
+    position: fixed;
+    top: 175px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+.list_of_input {
+
+    height: 180px;
+    width: 200px;
+    border-radius: 150px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    
+}
+#username{
+    border-radius: 8px;
+    border-color: rgb(64, 163, 130);
+    
+}
+
+#password{
+    border-radius: 8px;
+    border-color: rgb(64, 163, 130);
+
+
+}
+#messege{
+    color: rgb(249, 3, 3);
+    font-size: 25px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+
+#messageContainer {
+    margin-top: 10px; /* מבטיח שההודעה תהיה מתחת לכפתור */
+}
+.success {
+    color: red; /* טקסט אדום אם המשתמש לחץ OK */
+}
+.error {
+    color: blue; /* טקסט כחול אם המשתמש לחץ Cancel */
+}
+
+
+
+
