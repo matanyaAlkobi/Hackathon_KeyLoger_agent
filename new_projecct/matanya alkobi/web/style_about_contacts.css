@@ -1,0 +1,106 @@
+p{
+    text-align: center;
+}
+h4{
+    margin-left: 11% ;
+    padding-top: 1.5%;
+    margin-bottom: 4%;
+    display: inline-block;
+    border-bottom: 4px double rgba(20, 20, 20, 1);
+
+}
+
+.about{
+    width: 50%;
+    margin: auto;
+}
+
+.about h2{
+    text-align: center;
+    padding-top: 2%;
+    padding-bottom: 1%;
+}
+
+.contact{
+    width: 70%;
+    margin: auto;
+}
+
+.contact h2{
+    text-align: center;
+    padding-top: 3%;
+}
+
+.to_row0{
+    padding-top: 3%;
+    display: flex;
+}
+.to_row1{
+    padding-top: 3%;
+    margin: auto;
+    border: 5px black;
+    width: 85%;
+}
+
+h3{
+    display: flex;
+    text-align: center;
+    margin: auto;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+
+h3:hover{
+    cursor: pointer;
+    color: brown;
+    font-weight: bold;
+    transform: translateY(-2px);
+
+}
+
+.not_show_start {
+    display: none;
+    border-radius: 15px;
+    box-shadow:  1px 1px 1px 1px black;
+}
+.p_send_mail{
+    text-align: left;
+    padding-left: 9%;
+}
+
+.design_level_2{
+    text-align: left;
+    padding-left:9%;
+}
+
+.logo_email{
+    width: 35px;
+    height: 35px;
+    border-radius: 15%;
+}
+.logo_whatsapp{
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+}
+.logo_email:hover{
+    opacity: 0.6;
+    transition: 0.2s;
+}
+.logo_whatsapp:hover{
+    opacity: 0.6;
+    transition: 0.2s;
+
+}
+.bar_links{
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    list-style: none;
+    padding-top: 4%;
+    padding-bottom: 1%;
+}
