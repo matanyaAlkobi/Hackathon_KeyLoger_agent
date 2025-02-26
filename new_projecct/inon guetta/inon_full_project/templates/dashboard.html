@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>דשבורד</title>
+    <script src='../static/dashboard_script.js'></script> <!-- חיבור לקובץ JS -->
+</head>
+<body>
+    <h1>ברוך הבא, {{ current_user.id }}</h1>
+    <h2>רשימת תיקיות</h2>
+    <ul id="folder-list">
+        <!-- רשימת התיקיות תיטען כאן באמצעות JavaScript -->
+    </ul>
+
+    <h2><a href="{{ url_for('logout') }}">התנתק</a></h2>
+</body>
+</html>
