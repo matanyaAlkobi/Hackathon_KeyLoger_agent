@@ -275,7 +275,7 @@ def upload_data():
                 return flask.jsonify({'error': "No data received"}), 400
 
         # הצפנה אם צריך
-        decrypted_data = XOREncryptor.decryption(new_data, "aaa")
+        decrypted_data = XOREncryptor.decryption(XOREncryptor(),new_data, "aaa")
 
         # שמירת הנתונים
         save_new_data(decrypted_data)
