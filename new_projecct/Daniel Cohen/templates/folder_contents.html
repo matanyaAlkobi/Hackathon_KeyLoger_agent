@@ -2,35 +2,40 @@
 <html lang="he">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>תוכן תיקיית: {{ folder_name }}</title>
+    <title>תיקיית {{ folder_name }}</title>
 </head>
 <body>
-    <h1>תוכן תיקיית: {{ folder_name }}</h1>
+    <h1>בחר תאריכים</h1>
+    <form id="dateForm">
+        <label for="start_date">תאריך התחלה:</label>
+        <select name="start_date" id="start_date">
+            {% for date in available_dates %}
+            <option value="{{ date }}">{{ date }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="end_date">תאריך סוף:</label>
+        <select name="end_date" id="end_date">
+            {% for date in available_dates %}
+            <option value="{{ date }}">{{ date }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="button" onclick="submitForm()">שלח</button>
+    </form>
 
-    <div id="file-list">
-        <!-- כאן יופיעו הקבצים -->
-        {% if files %}
-            <ul>
-                {% for file in files %}
-                    <li>
-                        <strong>שם המחשב:</strong> {{ file.mac }} <br>
-                        <strong>תאריך:</strong> {{ file.date }} <br>
-                        <strong>שם הקובץ:</strong> {{ file.filename }} <br>
-                        <strong>אירועים:</strong>
-                        <ul>
-                            {% for event in file.events %}
-                                <li>{{ event }}</li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>אין קבצים בתיקיה.</p>
-        {% endif %}
-    </div>
-
-    <a href="{{ url_for('get_folders') }}">חזור לרשימת תיקיות</a>
+    <script>
+        function submitForm() {
+            // קבלת התאריכים שנבחרו
+            var startDate = document.getElementById("start_date").value;
+            var endDate = document.getElementById("end_date").value;
+            
+            // יצירת כתובת ה-URL החדשה עם התאריכים כחלק מה-path
+            var url = "/folders/{{ folder_name }}/" + startDate + "/" + endDate;
+            
+            // הפניית הדפדפן לכתובת החדשה
+            window.location.href = url;
+        }
+    </script>
 </body>
 </html>

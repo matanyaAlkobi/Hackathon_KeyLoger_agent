@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>רשימת תיקיות</title>
+</head>
+<body>
+    <h1>ברוך הבא, {{ current_user.id }}</h1>
+    <h2>רשימת תיקיות</h2>
+    <ul>
+        {% for folder in folders %}
+            <li><a href="{{ url_for('show_folder_contents', folder_name=folder) }}">{{ folder }}</a></li>
+        {% endfor %}
+    </ul>
+    <h2><a href="{{ url_for('logout') }}">התנתק</a></h2>
+</body>
+</htm

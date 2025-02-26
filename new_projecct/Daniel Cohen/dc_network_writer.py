@@ -13,8 +13,10 @@ class Network_writer(IWriter):
                 response = requests.post(SERVER_URL, json=data)
                 if response.status_code == 200:
                     print("✅ הנתונים נשלחו בהצלחה!")
+                elif response.status_code == 400:
+                    return False
                 else:
                     print(f"⚠ שגיאה בשליחת הנתונים! קוד תגובה: {response.status_code}, תגובה: {response.text}")
             except requests.exceptions.RequestException as e:
                 print(f"❌ כשל בשליחת הנתונים: {e}")
-        return
+        return True
