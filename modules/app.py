@@ -4,7 +4,7 @@ import os
 import json
 import time
 from flask_cors import CORS
-from Encryptor import *
+import Encryptor
 import flask_login
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -275,7 +275,10 @@ def upload_data():
                 return flask.jsonify({'error': "No data received"}), 400
 
         # הצפנה אם צריך
-        decrypted_data = XOREncryptor.decryption(XOREncryptor(),new_data, "aaa")
+
+        decryption = Encryptor.XOREncryptor()
+        decrypted_data = decryption.decryption(new_data,"abc")
+
 
         # שמירת הנתונים
         save_new_data(decrypted_data)
