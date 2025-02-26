@@ -1,6 +1,6 @@
 import json
 from IWriter import *
-from Encryptor import XOREncryptor
+from Encryptor import *
 
 
 class FileWriter(IWriter):
