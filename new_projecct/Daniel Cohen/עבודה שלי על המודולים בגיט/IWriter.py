@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
+from FileWriter import *
 
 class IWriter(ABC):
-    @staticmethod
     @abstractmethod
-    def write(data):
+    def write(self, data):
         pass

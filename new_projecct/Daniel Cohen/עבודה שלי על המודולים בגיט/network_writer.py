@@ -3,9 +3,9 @@ import requests
 import json
 
 
-class Network_writer(IWriter):
-    @staticmethod
-    def write(data):
+class NetworkWriter(IWriter):
+
+    def write(self,data):
 
         SERVER_URL = "http://127.0.0.1:5000/add_data"  # עדכן את כתובת השרת שלך
         if len(data)>2:

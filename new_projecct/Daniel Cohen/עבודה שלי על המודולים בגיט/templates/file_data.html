@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>נתוני הקובץ עבור {{ folder_name }} - {{ date }}</title>
+</head>
+<body>
+    <h1>נתוני הקובץ עבור {{ folder_name }} - {{ date }}</h1>
+
+    {% for file in file_info %}
+        <!-- הצגת שם המחשב פעם אחת -->
+        {% if loop.first %}
+            <h2>שם המחשב: {{ file.mac }}</h2>
+        {% endif %}
+
+        <div>
+            <!-- הצגת שם הקובץ -->
+            <h3>שם הקובץ: {{ file.filename }}</h3>
+            <!-- הצגת תאריך -->
+            <h3>תאריך: {{ file.date }}</h3>
+            <!-- הצגת האפליקציה -->
+            <h3>אפליקציה: {{ file.app }}</h3>
+            <!-- הצגת האירועים -->
+            <h3>אירועים:</h3>
+            <ul>
+                {% for event in file.data %}
+                    <li>{{ event }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</body>
+</html>
