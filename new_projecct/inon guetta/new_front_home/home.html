@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="style_navbar.css">
+    <link rel="stylesheet" href="style_home.css">
+    <script src="home.js" defer></script>
+
+</head>
+<body>
+    <header class="header">
+        <a href="home.html" class="home">Home</a>
+        <nav class="navbar">
+            <a href="">To Send</a>
+            <a href="guide.html">Guide</a>
+            <a href="about&contacts.html">About</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Data Table</h2>
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Name / Mac Address</th>
+                    <th>Date</th>
+                    <th>File Name</th>
+                    <th>Events</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button onclick="addRow()">Add Random Entry</button>
+        <button onclick="selectAll()">Select All</button>
+        <button onclick="deselectAll()">Deselect All</button>
+        <button class="button_delete" onclick="showPopup()">Delete</button>
+    </div>
+
+    <div id="popup" class="popup">
+        <p>Are you sure you want to delete the selected content?</p>
+        <button onclick="confirmDelete()">Yes</button>
+        <button onclick="hidePopup()">No</button>
+    </div>
+
+</body>
+</html>
