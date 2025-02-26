@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folder List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* בסיסי עיצוב */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0e0e0e; /* רקע כהה */
+            color: #f4f4f4;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 50px 20px;
+            text-align: center;
+            color: white;
+            border-bottom: 2px solid #444;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        header h1 {
+            font-size: 48px;
+            margin: 0;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        header h2 {
+            font-size: 32px;
+            margin-top: 10px;
+        }
+
+        /* רשימה */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        ul li {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 22px;
+            text-align: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        ul li a {
+            color: #1E90FF;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        ul li:hover {
+            background-color: rgba(0, 0, 0, 0.85);
+            transform: translateY(-5px);
+        }
+
+        ul li:hover a {
+            color: #32CD32;
+        }
+
+        /* כפתור התנתקות */
+        footer h2 {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 20px;
+        }
+
+        footer h2 a {
+            color: #FF6347;
+            font-size: 22px;
+            text-decoration: none;
+            padding: 12px 24px;
+            background-color: #333;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        footer h2 a:hover {
+            background-color: #555;
+        }
+
+        /* רקע דינמי עם קווים ירוקים */
+        .background-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .digital-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/black-tile.png');
+            opacity: 0.1;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* אנימציה של קווים דיגיטליים ירוקים */
+        @keyframes moveGreenLines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+
+        /* אלמנט רץ של קוד דיגיטלי ירוק */
+        .code-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            animation: moveGreenLines 10s linear infinite;
+            opacity: 0.15;
+        }
+
+        .code-lines {
+            position: absolute;
+            top: 20%;
+            left: 0;
+            width: 100%;
+            font-family: 'Courier New', Courier, monospace;
+            color: #00FF00;
+            font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .code-lines span {
+            display: block;
+            padding: 10px;
+        }
+
+        /* צבעים וכפתורים שדורשים אקשן */
+        .action-btn {
+            padding: 12px 24px;
+            font-size: 20px;
+            background-color: #32CD32;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #228B22;
+        }
+    </style>
+</head>
+<body>
+    <!-- קווים דיגיטליים נעים -->
+    <div class="background-lines"></div>
+    <div class="code-background">
+        <div class="code-lines">
+            <span>System Booting...</span>
+            <span>Loading Module: Encryption...</span>
+            <span>Connection Established</span>
+            <span>Running Diagnostics...</span>
+            <span>Initializing Firewall...</span>
+            <span>Data Processing...</span>
+            <span>Encryption: Active</span>
+            <span>Network Secure</span>
+            <span>Command Sent</span>
+        </div>
+    </div>
+
+    <!-- כותרת -->
+    <header>
+        <h1>Welcome, {{ current_user.id }}</h1>
+        <h2>Folder List</h2>
+    </header>
+
+    <!-- רשימת תיקיות -->
+    <ul>
+        {% for folder in folders %}
+            <li><a href="{{ url_for('show_folder_contents', folder_name=folder) }}">{{ folder }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <!-- כפתור התנתקות -->
+    <footer>
+        <h2><a href="{{ url_for('logout') }}">Logout</a></h2>
+    </footer>
+</body>
+</html>
