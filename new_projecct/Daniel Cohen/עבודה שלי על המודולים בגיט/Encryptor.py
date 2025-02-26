@@ -1,5 +1,5 @@
 from KeyloggerService import *
-from modules.IEncryptor import *
+from IEncryptor import *
 import json
 
 class XOREncryptor(IEncryptor):
@@ -26,6 +26,5 @@ class XOREncryptor(IEncryptor):
 
         # ניסוי להמיר את התוצאה לפורמט JSON
         return json.loads(decrypted_text)  # אם זה היה JSON תקני, נחזיר אותו
-
 
 
