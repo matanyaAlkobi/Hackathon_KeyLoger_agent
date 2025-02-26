@@ -395,8 +395,13 @@ def chek_if_stop_by_mac_address(json_data):
             data = json.load(f)
     except FileNotFoundError:
         data = {}
-    if data[mac_address] == False:
-        return True
+    try:
+        if data[mac_address] == False:
+            return True
+    except:
+        data[mac_address] = True
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
     return False
 
 @app.route('/health',methods=['GET'])
