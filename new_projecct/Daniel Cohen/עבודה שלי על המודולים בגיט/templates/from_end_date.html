@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Contents</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #121212; /* Dark theme background */
+            color: #e4e4e4; /* Light text color for readability */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        /* Container Styling */
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #1f1f1f;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border: 2px solid #444; /* Border for emphasis */
+        }
+
+        /* Header Styling */
+        h1 {
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1E90FF; /* Bold blue for emphasis */
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Folder, Time, File, and Key List Styling */
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        li:hover {
+            transform: translateX(5px); /* Slight effect when hovering */
+        }
+
+        .folder {
+            font-size: 24px;
+            font-weight: bold;
+            color: #16a085; /* Deep teal for folders */
+            border-bottom: 2px solid #16a085; /* Divider line */
+            padding-bottom: 5px;
+        }
+
+        .time {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2980b9; /* Blue for timestamps */
+            margin-left: 20px;
+        }
+
+        .file {
+            font-size: 18px;
+            color: #8e44ad; /* Purple for files */
+            margin-left: 40px;
+            position: relative;
+        }
+
+        .file::before {
+            content: "•";
+            position: absolute;
+            left: -20px;
+            top: 0;
+            font-size: 20px;
+            color: #8e44ad;
+        }
+
+        .keys {
+            font-size: 16px;
+            color: #d35400; /* Orange for keys */
+            margin-left: 60px;
+            padding-left: 10px;
+        }
+
+        /* Responsive Design for Smaller Screens */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .folder {
+                font-size: 22px;
+            }
+
+            .time {
+                font-size: 18px;
+            }
+
+            .file {
+                font-size: 16px;
+            }
+
+            .keys {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>File Contents</h1>
+        <ul>
+            <!-- Content will be dynamically inserted here -->
+            {% for folder, times in data.items() %}
+                <li class="folder">{{ folder }}
+                    <ul>
+                        {% for time, files in times.items() %}
+                            <li class="time">{{ time }}
+                                <ul>
+                                    {% for file, keys in files.items() %}
+                                        <li class="file">{{ file }}
+                                            <ul>
+                                                {% for key in keys %}
+                                                    <li class="keys">{{ key }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>
