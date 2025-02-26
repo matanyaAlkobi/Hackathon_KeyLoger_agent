@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>תוכן הקבצים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl; /* הצגת הטקסט מימין לשמאל */
+            margin: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        .folder {
+            font-weight: bold;
+            color: #16a085;
+        }
+        .time {
+            color: #2980b9;
+            font-weight: bold;
+        }
+        .file {
+            color: #8e44ad;
+        }
+        .keys {
+            color: #d35400;
+        }
+    </style>
+</head>
+<body>
+    <h1>תוכן הקבצים שנבחרו</h1>
+    <div>
+        <!-- כאן יוצג המידע בצורה קריאה -->
+        <ul>
+            <!-- התוכן יתווסף כאן בצורה מסודרת -->
+            {% for folder, times in data.items() %}
+                <li class="folder">{{ folder }}
+                    <ul>
+                        {% for time, files in times.items() %}
+                            <li class="time">{{ time }}
+                                <ul>
+                                    {% for file, keys in files.items() %}
+                                        <li class="file">{{ file }}
+                                            <ul>
+                                                {% for key in keys %}
+                                                    <li class="keys">{{ key }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
