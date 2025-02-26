@@ -1,0 +1,56 @@
+body{
+    background-image:url('imeg.jpg');
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* #name{
+    background-color: rgb(128, 98, 195);
+    position: fixed;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%); 
+} */
+#sumbit_button{
+    background-color: rgb(128, 98, 195);
+    position: fixed;
+    top: 175px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.list_of_input {
+
+    height: 180px;
+    width: 200px;
+    border-radius: 150px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    
+}
+#username{
+    border-radius: 8px;
+    border-color: rgb(64, 163, 130);
+    
+}
+
+#password{
+    border-radius: 8px;
+    border-color: rgb(64, 163, 130);
+
+
+}
+#messege{
+    color: rgb(249, 3, 3);
+    font-size: 25px;
+    font-weight: bold;
+    text-decoration: underline;
+}
