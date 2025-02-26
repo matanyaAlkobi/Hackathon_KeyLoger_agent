@@ -5,15 +5,7 @@
 }
 
 body{
-    background-image:url('imeg.jpg');
-    display: flex;
-    min-height: 100vh;
-    align-items: center;
-    flex-direction: row;
-    justify-content: center;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    padding-top: 7%;
 }
 .header{
     position: fixed;
@@ -30,7 +22,7 @@ body{
     font-size: 175%;
     text-decoration: none;
     font-weight: 500;
-    color:white;
+    color: black;
 }
 .home:hover{
     color: cadetblue;
@@ -40,7 +32,7 @@ body{
 .navbar a{
     position: relative;
     font-size: 18px;
-    color: white;
+    color: black;
     font-weight: 500;
     text-decoration: none;
     margin-left: 40px;
@@ -58,7 +50,7 @@ body{
     left: 0;
     width: 0;
     height: 2px;
-    background: rgb(26, 143, 201);
+    background: darkblue;
     transition: 0.3s;
 }
 
@@ -67,59 +59,3 @@ body{
 .navbar a:hover::before{
     width: 100%;
 }
-
-
-#sumbit_button{
-    background-color: rgb(128, 98, 195);
-    position: fixed;
-    top: 175px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-
-.list_of_input {
-
-    height: 180px;
-    width: 200px;
-    border-radius: 150px;
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
-    
-}
-#username{
-    border-radius: 8px;
-    border-color: rgb(64, 163, 130);
-    
-}
-
-#password{
-    border-radius: 8px;
-    border-color: rgb(64, 163, 130);
-
-
-}
-#messege{
-    color: rgb(249, 3, 3);
-    font-size: 25px;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-
-#messageContainer {
-    margin-top: 10px; /* מבטיח שההודעה תהיה מתחת לכפתור */
-}
-.success {
-    color: red; /* טקסט אדום אם המשתמש לחץ OK */
-}
-.error {
-    color: blue; /* טקסט כחול אם המשתמש לחץ Cancel */
-}
-
-
-
-
